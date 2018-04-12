@@ -1,0 +1,29 @@
+{
+  "name": "techorrectdash",
+  "version": "1.0.0",
+  "description": "Techorrect's test dashboard",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "protractor ./test/protractor.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlundy2/techorrectDash.git"
+  },
+  "keywords": [
+    "test",
+    "dashboard",
+    "ci",
+    "cd",
+    "techorrect"
+  ],
+  "author": "Jeremy Lundy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jlundy2/techorrectDash/issues"
+  },
+  "homepage": "https://github.com/jlundy2/techorrectDash#readme"
+}
