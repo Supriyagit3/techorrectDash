@@ -1,0 +1,57 @@
+<div class="container" ng-controller="ProjectController">
+  <div class="row row-header">
+    <div class="col-xs-12">
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a ui-sref="app">Home</a></li>
+        <li class="breadcrumb-item active">Project</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row row-content">
+    <div class="col-xs-12 col-sm-3">
+      <h3>Suites</h3>
+      <hr>
+    </div>
+
+    <div class="col-xs-12 col-sm-9 col-sm-pull-3">
+      <div ng-if="!showSuites">
+        <h3>{{suitesMessage}}</h3>
+      </div>
+      <div ng-if="showSuites">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Suite</th>
+              <th>Passing Tests</th>
+              <th>Failing Tests</th>
+              <th>Skipped Tests</th>
+              <th>Disabled Tests</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="suite in suites">
+              <td><a ui-sref="app.project.suite({suiteId: suite.suiteId})">{{suite.name}}</a></td>
+              <td>{{suite.passingTests}}</td>
+              <td>{{suite.failingTests}}</td>
+              <td>{{suite.skippedTests}}</td>
+              <td>{{suite.disabledTests}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="media">
+        <div class="media-left media-middle">
+          <img class="media-object img-thumbnail" ng-src={{featuredDish.image}}>
+        </div>
+        <div class="media-body">
+          <h2 class="media-heading">{{featuredDish.name}}
+            <span class="label label-danger">{{featuredDish.label}}</span>
+            <span class="badge">{{featuredDish.price | currency}}</span>
+          </h2>
+          <p>{{featuredDish.description}}</p>
+        </div>
+      </div> -->
+      </div>
+    </div>
+  </div>
+</div>

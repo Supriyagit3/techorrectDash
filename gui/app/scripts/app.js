@@ -1,70 +1,71 @@
-'use strict';
+"use strict";
 
-angular.module('confusionApp', ['ui.router', 'ngResource'])
+angular
+  .module("techorrectDash", ["ui.router", "ngResource", "ngDialog"])
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
-    // route for the home page
-      .state('app', {
-      url: '/',
-      views: {
-        'header': {
-          templateUrl: 'views/header.html',
-        },
-        'content': {
-          templateUrl: 'views/home.html',
-          controller: 'IndexController'
-        },
-        'footer': {
-          templateUrl: 'views/footer.html',
+      // route for the home page
+      .state("app", {
+        url: "/",
+        views: {
+          header: {
+            templateUrl: "views/header.html",
+            controller: "HeaderController"
+          },
+          content: {
+            templateUrl: "views/home.html",
+            controller: "HomeController"
+          },
+          footer: {
+            templateUrl: "views/footer.html"
+          }
         }
-      }
+      })
 
-    })
-
-    // route for the aboutus page
-    .state('app.aboutus', {
-      url: 'aboutus',
-      views: {
-        'content@': {
-          templateUrl: 'views/aboutus.html',
-          controller: 'AboutController'
+      // route for the project page
+      .state("app.project", {
+        url: "projects/:projectId",
+        views: {
+          "content@": {
+            templateUrl: "views/project.html",
+            controller: "ProjectController"
+          }
         }
-      }
-    })
+      })
 
-    // route for the contactus page
-    .state('app.contactus', {
-      url: 'contactus',
-      views: {
-        'content@': {
-          templateUrl: 'views/contactus.html',
-          controller: 'ContactController'
+      // route for the suite page
+      .state("app.project.suite", {
+        url: "/suites/:suiteId",
+        views: {
+          "content@": {
+            templateUrl: "views/suite.html",
+            controller: "SuiteController"
+          }
         }
-      }
-    })
+      })
 
-    // route for the menu page
-    .state('app.menu', {
-      url: 'menu',
-      views: {
-        'content@': {
-          templateUrl: 'views/menu.html',
-          controller: 'MenuController'
+      // route for the suite page
+      .state("app.project.suite.test", {
+        url: "/:testId/",
+        views: {
+          "content@": {
+            templateUrl: "views/test.html",
+            controller: "TestController"
+          }
         }
-      }
-    })
+      })
 
-    // route for the dishdetail page
-    .state('app.dishdetails', {
-      url: 'menu/:id',
-      views: {
-        'content@': {
-          templateUrl: 'views/dishdetail.html',
-          controller: 'DishDetailController'
+      // route for the suite page
+      .state("app.project.suite.suiteHistory", {
+        url: "/history",
+        views: {
+          "content@": {
+            templateUrl: "views/suiteHistory.html",
+            controller: "SuiteHistoryController"
+          }
         }
-      }
-    });
+      });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise("/");
   });

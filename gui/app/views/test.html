@@ -1,0 +1,47 @@
+<div class="container" ng-controller="ProjectController">
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a ui-sref="app">Home</a></li>
+        <li class="breadcrumb-item"><a ui-sref="app.project">Project</a></li>
+        <li class="breadcrumb-item"><a ui-sref="app.project.suite">Suite</a></li>
+        <li class="breadcrumb-item active">Test</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row row-content">
+    <div class="col-xs-12 col-sm-3">
+      <h3>Test Runs</h3>
+      <hr>
+    </div>
+
+    <div class="col-xs-12 col-sm-9 col-sm-pull-3">
+      <div ng-if="!showTestRuns">
+        <h3>{{testRunMessage}}</h3>
+      </div>
+      <div ng-if="showTestRuns">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date Run</th>
+              <th>Passed</th>
+              <th>Skipped</th>
+              <th>Disabled</th>
+              <th>Log</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="testRun in testRuns">
+              <td>{{testRun.dateRun}}</td>
+              <td>{{testRun.passed}}</td>
+              <td>{{testRun.skipped}}</td>
+              <td>{{testRun.disabled}}</td>
+              <td>{{testRun.log}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
