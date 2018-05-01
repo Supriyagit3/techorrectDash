@@ -81,7 +81,6 @@ angular
     "$http",
     "$window",
     "$rootScope",
-    "$window",
     "baseURL",
     "ngDialog",
     function($resource, $http, $window, $rootScope, baseURL, ngDialog) {
@@ -124,10 +123,12 @@ angular
         $resource(baseURL + "users/login").save(
           loginData,
           function(response) {
-            storeUserCredentials({
+            var credentials = {
               username: loginData.username,
               token: response.token
-            });
+            };
+            storeUserCredentials(credentials);
+            useCredentials(credentials);
             $rootScope.$broadcast("login:Successful");
           },
           function(response) {
@@ -152,9 +153,15 @@ angular
       };
 
       authFac.logout = function() {
-        $resource(baseURL + "users/logout").get(function(response) {
-          return response;
-        });
+        $resource(baseURL + "users/logout").save(
+          "",
+          function(response) {
+            return response;
+          },
+          function(response) {
+            return response;
+          }
+        );
         destroyUserCredentials();
       };
 

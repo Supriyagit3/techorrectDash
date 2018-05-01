@@ -5,12 +5,10 @@ angular
 
   .controller("HomeController", [
     "$scope",
-    "$http",
     "ProjectFactory",
-    function($scope, $http, ProjectFactory) {
+    function($scope, ProjectFactory) {
       $scope.showProjects = false;
       $scope.projectsMessage = "Loading ...";
-      $http.defaults.headers.common["x-access-token"] = "foo";
       $scope.projects = ProjectFactory.query(
         function(response) {
           $scope.projects = response;
@@ -27,13 +25,11 @@ angular
   .controller("ProjectController", [
     "$scope",
     "$stateParams",
-    "$http",
     "SuiteFactory",
-    function($scope, $stateParams, $http, SuiteFactory) {
+    function($scope, $stateParams, SuiteFactory) {
       $scope.suites = {};
       $scope.showSuites = false;
       $scope.suiteMessage = "Loading ...";
-      $http.defaults.headers.common["x-access-token"] = "foo";
       $scope.dish = SuiteFactory.query(
         { projectId: $stateParams.projectId },
         function(response) {
@@ -51,13 +47,11 @@ angular
   .controller("SuiteController", [
     "$scope",
     "$stateParams",
-    "$http",
     "TestFactory",
-    function($scope, $stateParams, $http, TestFactory) {
+    function($scope, $stateParams, TestFactory) {
       $scope.tests = {};
       $scope.showTests = false;
       $scope.testMessage = "Loading ...";
-      $http.defaults.headers.common["x-access-token"] = "foo";
       $scope.dish = TestFactory.query(
         { projectId: $stateParams.projectId, suiteId: $stateParams.suiteId },
         function(response) {
@@ -75,13 +69,11 @@ angular
   .controller("TestController", [
     "$scope",
     "$stateParams",
-    "$http",
     "TestRunFactory",
-    function($scope, $stateParams, $http, TestRunFactory) {
+    function($scope, $stateParams, TestRunFactory) {
       $scope.testRuns = {};
       $scope.showTestRuns = false;
       $scope.testRunMessage = "Loading ...";
-      $http.defaults.headers.common["x-access-token"] = "foo";
       $scope.dish = TestRunFactory.query(
         {
           projectId: $stateParams.projectId,
@@ -103,13 +95,11 @@ angular
   .controller("SuiteHistoryController", [
     "$scope",
     "$stateParams",
-    "$http",
     "SuiteRunFactory",
-    function($scope, $stateParams, $http, SuiteRunFactory) {
+    function($scope, $stateParams, SuiteRunFactory) {
       $scope.suiteRuns = {};
       $scope.showSuiteRuns = false;
       $scope.suiteRunMessage = "Loading ...";
-      $http.defaults.headers.common["x-access-token"] = "foo";
       $scope.dish = SuiteRunFactory.query(
         {
           projectId: $stateParams.projectId,
@@ -180,11 +170,11 @@ angular
     "$window",
     "AuthFactory",
     function($scope, ngDialog, $window, AuthFactory) {
-      $scope.loginData = $window.localStorage.getObject("userinfo", "{}");
+      $scope.loginData = $window.localStorage.getItem("userinfo");
 
       $scope.doLogin = function() {
         if ($scope.rememberMe) {
-          $window.localStorage.storeObject("userinfo", $scope.loginData);
+          $window.localStorage.setItem("userinfo", $scope.loginData);
         }
         AuthFactory.login($scope.loginData);
 

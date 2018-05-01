@@ -1,13 +1,26 @@
 {
   "name": "techorrectDash",
   "homepage": "https://github.com/jlundy2/techorrectDash",
-  "authors": ["Jeremy Lundy <jeremy.lundy@gmail.com>"],
+  "authors": [
+    "Jeremy Lundy <jeremy.lundy@gmail.com>"
+  ],
   "description": "Techorrect's test dashboard",
   "main": "projects.html",
-  "keywords": ["test", "dashboard", "ci", "cd"],
+  "keywords": [
+    "test",
+    "dashboard",
+    "ci",
+    "cd"
+  ],
   "license": "MIT",
   "private": true,
-  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
   "resolutions": {
     "angular": "1.6.10"
   },
@@ -19,6 +32,8 @@
     "angular-ui-router": "^1.0.15",
     "angular-resource": "^1.6.10",
     "angular-mocks": "^1.6.10",
-    "ng-dialog": "^1.4.0"
+    "ng-dialog": "^1.4.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3"
   }
 }
