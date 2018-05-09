@@ -32,7 +32,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="test in tests">
-              <td><a ui-sref="app.project.suite.test({testId: test.testId})">{{test.name}}</a></td>
+              <td><a ui-sref="app.project.suite.test({testId: test._id, testName: test.name})">{{test.name}}</a></td>
               <td>{{test.currentPassed}}</td>
               <td>{{test.skip}}</td>
               <td>Rerun</td>

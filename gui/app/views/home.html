@@ -1,10 +1,20 @@
 <div class="container" ng-controller="HomeController">
-  <div class="row row-content">
-    <div class="col-xs-12 col-sm-3 col-sm-push-9">
-      <p style="padding:20px;"></p>
-      <h3 align=center>Projects</h3>
+  <div class="row row-header">
+    <div class="col-xs-12">
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item active">Home</li>
+      </ul>
     </div>
-    <div class="col-xs-12 col-sm-9 col-sm-pull-3">
+  </div>
+  <div class="row row-content">
+    <div class="col-12">
+      <br>
+      <h3>Projects</h3>
+      <hr>
+    </div>
+  </div>
+  <div class="row row-content">
+    <div class="col-12">
       <div ng-if="!showProjects">
         <h3>{{projectsMessage}}</h3>
       </div>
@@ -22,7 +32,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="project in projects">
-                    <td><a ui-sref="app.project({projectId: project.projectId})">{{project.name}}</a></td>
+                    <td><a ui-sref="app.project({projectId: project._id})">{{project.name}}</a></td>
                     <td>{{project.healthySuites}}</td>
                     <td>{{project.unhealthySuites}}</td>
                     <td>{{project.healtyFailedLevel}}</td>

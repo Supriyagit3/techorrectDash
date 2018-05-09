@@ -31,7 +31,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="suite in suites">
-              <td><a ui-sref="app.project.suite({suiteId: suite.suiteId})">{{suite.name}}</a></td>
+              <td><a ui-sref="app.project.suite({suiteId: suite._id})">{{suite.name}}</a></td>
               <td>{{suite.passingTests}}</td>
               <td>{{suite.failingTests}}</td>
               <td>{{suite.skippedTests}}</td>

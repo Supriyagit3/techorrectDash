@@ -32,8 +32,8 @@
           </thead>
           <tbody>
               <tr ng-repeat="testRun in testRuns">
-                <td>{{testRun.dateRun}}</td>
-                <td>{{testRun.testId}}</td>
+                <td>test {{testRun.createdAt | date : short}}</td>
+                <td>{{testRun._id}}</td>
                 <td>{{testRun.passed}}</td>
                 <td>{{testRun.skipped}}</td>
                 <td>{{testRun.disabled}}</td>
