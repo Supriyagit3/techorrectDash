@@ -12,7 +12,7 @@ suiteRouter
   .route("/")
 
   .get(function(req, res, next) {
-    Suite.find({}, function(err, suite) {
+    Suite.find({ projectId: req.params.projectId }, function(err, suite) {
       if (err) throw err;
       res.json(suite);
     });
@@ -29,5 +29,34 @@ suiteRouter
         "Content-Type": "text/plain"
       });
       res.end("Added the suite with id: " + id);
+    });
+  });
+
+suiteRouter
+  .route("/:suiteId")
+
+  .get(function(req, res, next) {
+    Suite.findById(req.params.suiteId, function(err, suite) {
+      if (err) throw err;
+      res.json(suite);
+    });
+  })
+
+  .put(function(req, res, next) {
+    Suite.findByIdAndUpdate(
+      req.params.suiteId,
+      { $set: req.body },
+      { new: true },
+      function(err, suite) {
+        if (err) return next(err);
+        res.json(suite);
+      }
+    );
+  })
+
+  .delete(function(req, res, next) {
+    Suite.findByIdAndRemove(req.params.suiteId, function(err, resp) {
+      if (err) return next(err);
+      res.json(resp);
     });
   });

@@ -5,8 +5,7 @@ var suiteSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     passingTests: {
       type: Number,
@@ -38,6 +37,8 @@ var suiteSchema = new Schema(
     timestamps: true
   }
 );
+
+suiteSchema.index({ projectId: 1, name: 1 }, { unique: true });
 
 var Suite = mongoose.model("Suite", suiteSchema);
 

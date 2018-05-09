@@ -5,8 +5,7 @@ var testSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     currentPassed: {
       type: Boolean,
@@ -38,6 +37,8 @@ var testSchema = new Schema(
     timestamps: true
   }
 );
+
+testSchema.index({ projectId: 1, suiteId: 1, name: 1 }, { unique: true });
 
 var Test = mongoose.model("Test", testSchema);
 

@@ -12,9 +12,9 @@ projectRouter
   .route("/")
 
   .get(function(req, res, next) {
-    Project.find({}, function(err, dish) {
+    Project.find({}, function(err, project) {
       if (err) throw err;
-      res.json(dish);
+      res.json(project);
     });
   })
 
@@ -28,5 +28,34 @@ projectRouter
         "Content-Type": "text/plain"
       });
       res.end("Added the project with id: " + id);
+    });
+  });
+
+projectRouter
+  .route("/:projectId")
+
+  .get(function(req, res, next) {
+    Project.findById(req.params.projectId, function(err, project) {
+      if (err) return next(err);
+      res.json(project);
+    });
+  })
+
+  .put(function(req, res, next) {
+    Project.findByIdAndUpdate(
+      req.params.projectId,
+      { $set: req.body },
+      { new: true },
+      function(err, project) {
+        if (err) return next(err);
+        res.json(project);
+      }
+    );
+  })
+
+  .delete(function(req, res, next) {
+    Project.findByIdAndRemove(req.params.projectId, function(err, resp) {
+      if (err) return next(err);
+      res.json(resp);
     });
   });

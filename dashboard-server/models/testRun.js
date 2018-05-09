@@ -4,8 +4,7 @@ var Schema = mongoose.Schema;
 var testRunSchema = new Schema(
   {
     suiteRunId: {
-      type: String,
-      required: true
+      type: String
     },
     passed: {
       type: Boolean,
@@ -39,6 +38,11 @@ var testRunSchema = new Schema(
   {
     timestamps: true
   }
+);
+
+testRunSchema.index(
+  { projectId: 1, suiteId: 1, testId: 1, suiteRunId: 1 },
+  { unique: true }
 );
 
 var TestRun = mongoose.model("TestRun", testRunSchema);

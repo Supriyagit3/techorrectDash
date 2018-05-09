@@ -12,13 +12,21 @@ testRunRouter
   .route("/")
 
   .get(function(req, res, next) {
-    TestRun.find({}, function(err, testRun) {
-      if (err) throw err;
-      res.json(testRun);
-    });
+    TestRun.find(
+      {
+        projectId: req.body.projectId,
+        suiteId: req.body.suiteId,
+        testId: req.body.testId
+      },
+      function(err, testRun) {
+        if (err) throw err;
+        res.json(testRun);
+      }
+    );
   })
 
   .post(function(req, res, next) {
+    console.log("In POST");
     req.body.projectId = req.params.projectId;
     req.body.suiteId = req.params.suiteId;
     req.body.testId = req.params.testId;
