@@ -1,0 +1,1001 @@
+swagger: '2.0'
+
+################################################################################
+#                              API Information                                 #
+################################################################################
+info:
+  version: "0.0.1"
+  title: Techorrect Test Dashboard
+
+# during dev, should point to your local machine
+host: localhost
+# basePath prefixes all resource paths
+basePath: /dashboard
+
+schemes:
+  # tip: remove http to make production-grade
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+
+################################################################################
+#                                           Paths                              #
+################################################################################
+paths:
+  /projects:
+    get:
+      description: |
+        Gets the projects that the logged in user is authorized to view.
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: name
+          in: query
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Projects'
+        403:
+          description: Forbidden
+    post:
+      description: |
+        Creates a project
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: project
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Projects'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Projects'
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}:
+    get:
+      description: |
+        Gets one project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Projects'
+        403:
+          description: Forbidden
+    put:
+      description: |
+        Updates a project
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: project
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Projects'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Projects'
+        403:
+          description: Forbidden
+    delete:
+      description: |
+        Deletes a project
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Successfully deleted
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites:
+    get:
+      description: |
+        Gets the suites that have run for a given project
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: prevRuns
+          in: query
+          required: false
+          type: integer
+          default: 25
+        - name: name
+          in: query
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Suites'
+        403:
+          description: Forbidden
+    post:
+      description: |
+        Creates a suite for a given project
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suite
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Suites'
+      responses:
+        200:
+          description: OK
+        403:
+          description: Forbidden
+
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites/{suiteId}:
+    get:
+      description: |
+        Gets one suite
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Suites'
+        403:
+          description: Forbidden
+
+    put:
+      description: |
+        Updates a suite
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: suite
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Suites'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Suites'
+        403:
+          description: Forbidden
+    delete:
+      description: |
+        Deletes a suite
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Deleted
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites/{suiteId}/{suiteRunId}:
+    get:
+      description: |
+        Gets the test runs that ran as part of a particular suite run.
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: suiteRunId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TestRuns'
+        403:
+          description: Forbidden
+
+  /projects/{projectId}/suites/{suiteId}/tests:
+    get:
+      description: |
+        Gets the tests that have run for a given suite
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: name
+          in: query
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tests'
+        403:
+          description: Forbidden
+
+    post:
+      description: |
+        Creates a test that runs for a given suite
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: test
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Tests'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tests'
+        403:
+          description: Forbidden
+
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites/{suiteId}/tests/{testId}:
+    get:
+      description: |
+        Gets one test
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Tests'
+        403:
+          description: Forbidden
+    put:
+      description: |
+        Updates a test
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+        - name: test
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Tests'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Tests'
+        403:
+          description: Forbidden
+
+    delete:
+      description: |
+        Deletes a test
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Successfully deleted
+        403:
+          description: Forbidden
+
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites/{suiteId}/tests/{testId}/testRuns:
+    get:
+      description: |
+        Gets the runs for a given test.
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TestRuns'
+        403:
+          description: Forbidden
+
+    post:
+      description: |
+        Creates a test run
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/TestRuns'
+        403:
+          description: Forbidden
+
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites/{suiteId}/tests/{testId}/disable:
+    post:
+      description: |
+        Disables the test from running
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+        - name: prevRuns
+          in: query
+          required: false
+          type: integer
+          default: 25
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TestRuns'
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites/{suiteId}/tests/{testId}/enable:
+    post:
+      description: |
+        Disables the test from running
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TestRuns'
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /projects/{projectId}/suites/{suiteId}/tests/{testId}/rerun:
+    post:
+      description: |
+        Disables the test from running
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TestRuns'
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+        - name: suiteId
+          in: path
+          required: true
+          type: string
+        - name: testId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+  /users:
+    post:
+      description: |
+        Creates a user and authorizes that user for a list of projects.
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Users'
+      responses:
+        201:
+          description: Successful response of created user object excluding password.
+          schema:
+            $ref: '#/definitions/Users'
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      responses:
+        200:
+          description: OK
+
+  /users/{username}:
+    put:
+      description: |
+        Updates a user's password, admin status, or list of projects.
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: username
+          in: path
+          required: true
+          type: string
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Users'
+      responses:
+        200:
+          description: Successful response of updated user object excluding password.
+          schema:
+            $ref: '#/definitions/Users'
+        403:
+          description: Forbidden
+    delete:
+      description: |
+        Deletes a user.
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successfully deleted user.
+        403:
+          description: Forbidden
+    options:
+      description: |
+        Options operation
+      parameters:
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+
+
+  /users/login:
+    post:
+      description: |
+        Logs in a user so they can see their projects.
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Users'
+      responses:
+        200:
+          description: Successful response returning an access token for the user.
+          schema:
+            type: string
+            example: sampleToken
+        401:
+          description: Unauthorized
+    options:
+      description: |
+        Options operation
+      responses:
+        200:
+          description: OK
+
+  /users/logout:
+    post:
+      description: |
+        Logs a user out.
+      parameters:
+        - name: x-access-token
+          in: header
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful log out operation
+        401:
+          description: Unauthorized
+    options:
+      description: |
+        Options operation
+      responses:
+        200:
+          description: OK
+
+
+################################################################################
+#                                 Definitions                                  #
+################################################################################
+definitions:
+  Projects:
+    type: object
+    properties:
+      projectId:
+        type: string
+        example: project1
+      name:
+        type: string
+        example: Project name 1
+      healthySuites:
+        type: integer
+        example: 30
+      unhealthySuites:
+        type: integer
+        example: 2
+      healtyFailedLevel:
+        type: integer
+        example: 5
+      healthySkippedLevel:
+        type: integer
+        example: 5
+      healthyDisabledLevel:
+        type: integer
+        example: 10
+
+  Suites:
+    type: object
+    properties:
+      suiteId:
+        type: string
+        example: suite1
+      name:
+        type: string
+        example: Suite name 1
+      passingTests:
+        type: integer
+        example: 100
+      failingTests:
+        type: integer
+        example: 4
+      skippedTests:
+        type: integer
+        example: 3
+      disabledTests:
+        type: integer
+        example: 3
+      previousSuiteIds:
+        type: array
+        items:
+          type: string
+          example: ["suiteRun1", "suiteRun2", "suiteRun3"]
+
+  Tests:
+    type: object
+    properties:
+      testId:
+        type: string
+        example: test1
+      name:
+        type: string
+        example: Test Name 1
+      currentPassed:
+        type: boolean
+        example: false
+      skip:
+        type: boolean
+        example: false
+      disable:
+        type: boolean
+        example: false
+      rerun:
+        type: boolean
+        example: false
+
+  TestRuns:
+    type: object
+    properties:
+      testId:
+        type: string
+        example: test1
+      suiteRunId:
+        type: string
+        example: suiteRun1
+      dateRun:
+        type: string
+        format: date-time
+      passed:
+        type: boolean
+        example: true
+      skipped:
+        type: boolean
+        example: false
+      disabled:
+        type: boolean
+        example: false
+      log:
+        type: string
+        example: Test passed
+
+  Users:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      admin:
+        type: boolean
+      authorizedProjects:
+        type: string
