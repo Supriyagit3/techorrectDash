@@ -5,7 +5,8 @@ var Default = require('../service/DefaultService');
 
 module.exports.projectsGET = function projectsGET (req, res, next) {
   var xAccessToken = req.swagger.params['x-access-token'].value;
-  Default.projectsGET(xAccessToken)
+  var name = req.swagger.params['name'].value;
+  Default.projectsGET(xAccessToken,name)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -15,7 +16,69 @@ module.exports.projectsGET = function projectsGET (req, res, next) {
 };
 
 module.exports.projectsOPTIONS = function projectsOPTIONS (req, res, next) {
-  Default.projectsOPTIONS()
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  Default.projectsOPTIONS(xAccessToken,projectId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsPOST = function projectsPOST (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var project = req.swagger.params['project'].value;
+  Default.projectsPOST(xAccessToken,project)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdDELETE = function projectsProjectIdDELETE (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  Default.projectsProjectIdDELETE(xAccessToken,projectId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdGET = function projectsProjectIdGET (req, res, next) {
+  var projectId = req.swagger.params['projectId'].value;
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  Default.projectsProjectIdGET(projectId,xAccessToken)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdOPTIONS = function projectsProjectIdOPTIONS (req, res, next) {
+  var projectId = req.swagger.params['projectId'].value;
+  Default.projectsProjectIdOPTIONS(projectId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdPUT = function projectsProjectIdPUT (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  var project = req.swagger.params['project'].value;
+  Default.projectsProjectIdPUT(xAccessToken,projectId,project)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -28,7 +91,8 @@ module.exports.projectsProjectIdSuitesGET = function projectsProjectIdSuitesGET 
   var xAccessToken = req.swagger.params['x-access-token'].value;
   var projectId = req.swagger.params['projectId'].value;
   var prevRuns = req.swagger.params['prevRuns'].value;
-  Default.projectsProjectIdSuitesGET(xAccessToken,projectId,prevRuns)
+  var name = req.swagger.params['name'].value;
+  Default.projectsProjectIdSuitesGET(xAccessToken,projectId,prevRuns,name)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -48,11 +112,11 @@ module.exports.projectsProjectIdSuitesOPTIONS = function projectsProjectIdSuites
     });
 };
 
-module.exports.projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsGET = function projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsGET (req, res, next) {
+module.exports.projectsProjectIdSuitesPOST = function projectsProjectIdSuitesPOST (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
   var projectId = req.swagger.params['projectId'].value;
-  var suiteId = req.swagger.params['suiteId'].value;
-  var suiteRunId = req.swagger.params['suiteRunId'].value;
-  Default.projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsGET(projectId,suiteId,suiteRunId)
+  var suite = req.swagger.params['suite'].value;
+  Default.projectsProjectIdSuitesPOST(xAccessToken,projectId,suite)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -61,11 +125,64 @@ module.exports.projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsGET = function pr
     });
 };
 
-module.exports.projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsOPTIONS = function projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsOPTIONS (req, res, next) {
+module.exports.projectsProjectIdSuitesSuiteIdDELETE = function projectsProjectIdSuitesSuiteIdDELETE (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  Default.projectsProjectIdSuitesSuiteIdDELETE(xAccessToken,projectId,suiteId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdGET = function projectsProjectIdSuitesSuiteIdGET (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  Default.projectsProjectIdSuitesSuiteIdGET(xAccessToken,projectId,suiteId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdOPTIONS = function projectsProjectIdSuitesSuiteIdOPTIONS (req, res, next) {
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  Default.projectsProjectIdSuitesSuiteIdOPTIONS(projectId,suiteId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdPUT = function projectsProjectIdSuitesSuiteIdPUT (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  var suite = req.swagger.params['suite'].value;
+  Default.projectsProjectIdSuitesSuiteIdPUT(xAccessToken,projectId,suiteId,suite)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdSuiteRunIdGET = function projectsProjectIdSuitesSuiteIdSuiteRunIdGET (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
   var projectId = req.swagger.params['projectId'].value;
   var suiteId = req.swagger.params['suiteId'].value;
   var suiteRunId = req.swagger.params['suiteRunId'].value;
-  Default.projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsOPTIONS(projectId,suiteId,suiteRunId)
+  Default.projectsProjectIdSuitesSuiteIdSuiteRunIdGET(xAccessToken,projectId,suiteId,suiteRunId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -78,7 +195,8 @@ module.exports.projectsProjectIdSuitesSuiteIdTestsGET = function projectsProject
   var xAccessToken = req.swagger.params['x-access-token'].value;
   var projectId = req.swagger.params['projectId'].value;
   var suiteId = req.swagger.params['suiteId'].value;
-  Default.projectsProjectIdSuitesSuiteIdTestsGET(xAccessToken,projectId,suiteId)
+  var name = req.swagger.params['name'].value;
+  Default.projectsProjectIdSuitesSuiteIdTestsGET(xAccessToken,projectId,suiteId,name)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -91,6 +209,33 @@ module.exports.projectsProjectIdSuitesSuiteIdTestsOPTIONS = function projectsPro
   var projectId = req.swagger.params['projectId'].value;
   var suiteId = req.swagger.params['suiteId'].value;
   Default.projectsProjectIdSuitesSuiteIdTestsOPTIONS(projectId,suiteId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdTestsPOST = function projectsProjectIdSuitesSuiteIdTestsPOST (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  var test = req.swagger.params['test'].value;
+  Default.projectsProjectIdSuitesSuiteIdTestsPOST(xAccessToken,projectId,suiteId,test)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdDELETE = function projectsProjectIdSuitesSuiteIdTestsTestIdDELETE (req, res, next) {
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  var testId = req.swagger.params['testId'].value;
+  Default.projectsProjectIdSuitesSuiteIdTestsTestIdDELETE(projectId,suiteId,testId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -154,6 +299,47 @@ module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdEnablePOST = function pr
     });
 };
 
+module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdGET = function projectsProjectIdSuitesSuiteIdTestsTestIdGET (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  var testId = req.swagger.params['testId'].value;
+  Default.projectsProjectIdSuitesSuiteIdTestsTestIdGET(xAccessToken,projectId,suiteId,testId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdOPTIONS = function projectsProjectIdSuitesSuiteIdTestsTestIdOPTIONS (req, res, next) {
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  var testId = req.swagger.params['testId'].value;
+  Default.projectsProjectIdSuitesSuiteIdTestsTestIdOPTIONS(projectId,suiteId,testId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdPUT = function projectsProjectIdSuitesSuiteIdTestsTestIdPUT (req, res, next) {
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  var testId = req.swagger.params['testId'].value;
+  var test = req.swagger.params['test'].value;
+  Default.projectsProjectIdSuitesSuiteIdTestsTestIdPUT(projectId,suiteId,testId,test)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdRerunOPTIONS = function projectsProjectIdSuitesSuiteIdTestsTestIdRerunOPTIONS (req, res, next) {
   var projectId = req.swagger.params['projectId'].value;
   var suiteId = req.swagger.params['suiteId'].value;
@@ -200,6 +386,20 @@ module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsOPTIONS = functi
   var suiteId = req.swagger.params['suiteId'].value;
   var testId = req.swagger.params['testId'].value;
   Default.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsOPTIONS(projectId,suiteId,testId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsPOST = function projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsPOST (req, res, next) {
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  var projectId = req.swagger.params['projectId'].value;
+  var suiteId = req.swagger.params['suiteId'].value;
+  var testId = req.swagger.params['testId'].value;
+  Default.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsPOST(xAccessToken,projectId,suiteId,testId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

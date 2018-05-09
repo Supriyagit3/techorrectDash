@@ -21,6 +21,10 @@ paths:
         in: "header"
         required: true
         type: "string"
+      - name: "name"
+        in: "query"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Successful response"
@@ -28,11 +32,118 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Projects"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a project\n"
+      operationId: "projectsPOST"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "project"
+        required: true
+        schema:
+          $ref: "#/definitions/Projects"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Projects"
+        403:
+          description: "Forbidden"
       x-swagger-router-controller: "Default"
     options:
       description: "Options operation\n"
       operationId: "projectsOPTIONS"
-      parameters: []
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /projects/{projectId}:
+    get:
+      description: "Gets one project\n"
+      operationId: "projectsProjectIdGET"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Projects"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    put:
+      description: "Updates a project\n"
+      operationId: "projectsProjectIdPUT"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "project"
+        required: true
+        schema:
+          $ref: "#/definitions/Projects"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Projects"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "Deletes a project\n"
+      operationId: "projectsProjectIdDELETE"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "Successfully deleted"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    options:
+      description: "Options operation\n"
+      operationId: "projectsProjectIdOPTIONS"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
       responses:
         200:
           description: "OK"
@@ -55,6 +166,10 @@ paths:
         required: false
         type: "integer"
         default: 25
+      - name: "name"
+        in: "query"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Successful response"
@@ -62,6 +177,31 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Suites"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a suite for a given project\n"
+      operationId: "projectsProjectIdSuitesPOST"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "suite"
+        required: true
+        schema:
+          $ref: "#/definitions/Suites"
+      responses:
+        200:
+          description: "OK"
+        403:
+          description: "Forbidden"
       x-swagger-router-controller: "Default"
     options:
       description: "Options operation\n"
@@ -75,10 +215,10 @@ paths:
         200:
           description: "OK"
       x-swagger-router-controller: "Default"
-  /projects/{projectId}/suites/{suiteId}/tests:
+  /projects/{projectId}/suites/{suiteId}:
     get:
-      description: "Gets the tests that have run for a given suite\n"
-      operationId: "projectsProjectIdSuitesSuiteIdTestsGET"
+      description: "Gets one suite\n"
+      operationId: "projectsProjectIdSuitesSuiteIdGET"
       parameters:
       - name: "x-access-token"
         in: "header"
@@ -96,13 +236,64 @@ paths:
         200:
           description: "Successful response"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Tests"
+            $ref: "#/definitions/Suites"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    put:
+      description: "Updates a suite\n"
+      operationId: "projectsProjectIdSuitesSuiteIdPUT"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "suite"
+        required: true
+        schema:
+          $ref: "#/definitions/Suites"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Suites"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "Deletes a suite\n"
+      operationId: "projectsProjectIdSuitesSuiteIdDELETE"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "Deleted"
+        403:
+          description: "Forbidden"
       x-swagger-router-controller: "Default"
     options:
       description: "Options operation\n"
-      operationId: "projectsProjectIdSuitesSuiteIdTestsOPTIONS"
+      operationId: "projectsProjectIdSuitesSuiteIdOPTIONS"
       parameters:
       - name: "projectId"
         in: "path"
@@ -116,11 +307,15 @@ paths:
         200:
           description: "OK"
       x-swagger-router-controller: "Default"
-  /projects/{projectId}/suites/{suiteId}/{suiteRunId}/testRuns:
+  /projects/{projectId}/suites/{suiteId}/{suiteRunId}:
     get:
-      description: "Gets the tests that have run for a given suite\n"
-      operationId: "projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsGET"
+      description: "Gets the test runs that ran as part of a particular suite run.\n"
+      operationId: "projectsProjectIdSuitesSuiteIdSuiteRunIdGET"
       parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
       - name: "projectId"
         in: "path"
         required: true
@@ -140,10 +335,74 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/TestRuns"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+  /projects/{projectId}/suites/{suiteId}/tests:
+    get:
+      description: "Gets the tests that have run for a given suite\n"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsGET"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "name"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tests"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a test that runs for a given suite\n"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsPOST"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "test"
+        required: true
+        schema:
+          $ref: "#/definitions/Tests"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tests"
+        403:
+          description: "Forbidden"
       x-swagger-router-controller: "Default"
     options:
       description: "Options operation\n"
-      operationId: "projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsOPTIONS"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsOPTIONS"
       parameters:
       - name: "projectId"
         in: "path"
@@ -153,7 +412,103 @@ paths:
         in: "path"
         required: true
         type: "string"
-      - name: "suiteRunId"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /projects/{projectId}/suites/{suiteId}/tests/{testId}:
+    get:
+      description: "Gets one test\n"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsTestIdGET"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "testId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Tests"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    put:
+      description: "Updates a test\n"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsTestIdPUT"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "testId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "test"
+        required: true
+        schema:
+          $ref: "#/definitions/Tests"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Tests"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "Deletes a test\n"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsTestIdDELETE"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "testId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "Successfully deleted"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    options:
+      description: "Options operation\n"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsTestIdOPTIONS"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "testId"
         in: "path"
         required: true
         type: "string"
@@ -163,7 +518,7 @@ paths:
       x-swagger-router-controller: "Default"
   /projects/{projectId}/suites/{suiteId}/tests/{testId}/testRuns:
     get:
-      description: "Gets the tests that have run for a given suite\n"
+      description: "Gets the runs for a given test.\n"
       operationId: "projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsGET"
       parameters:
       - name: "x-access-token"
@@ -189,6 +544,36 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/TestRuns"
+        403:
+          description: "Forbidden"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a test run\n"
+      operationId: "projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsPOST"
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "projectId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "suiteId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "testId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/TestRuns"
+        403:
+          description: "Forbidden"
       x-swagger-router-controller: "Default"
     options:
       description: "Options operation\n"
@@ -469,6 +854,7 @@ paths:
           description: "Successful response returning an access token for the user."
           schema:
             type: "string"
+            example: "sampleToken"
         401:
           description: "Unauthorized"
       x-swagger-router-controller: "Default"
@@ -593,11 +979,6 @@ definitions:
       rerun:
         type: "boolean"
         example: false
-      previousSuiteIds:
-        type: "array"
-        items:
-          type: "string"
-          example: ""
     example:
       currentPassed: false
       disable: false
@@ -605,16 +986,13 @@ definitions:
       testId: "test1"
       skip: false
       rerun: false
-      previousSuiteIds:
-      - ""
-      - ""
   TestRuns:
     type: "object"
     properties:
       testId:
         type: "string"
         example: "test1"
-      SuiteRunId:
+      suiteRunId:
         type: "string"
         example: "suiteRun1"
       dateRun:
@@ -634,7 +1012,7 @@ definitions:
         example: "Test passed"
     example:
       log: "Test passed"
-      SuiteRunId: "suiteRun1"
+      suiteRunId: "suiteRun1"
       testId: "test1"
       dateRun: "2000-01-23T04:56:07.000+00:00"
       disabled: false

@@ -1,484 +1,779 @@
-"use strict";
+'use strict';
+
 
 /**
- * Gets the projects that the logged in user is authorized to view.
+ * Gets the projects that the logged in user is authorized to view. 
  *
- * xAccessToken String
+ * xAccessToken String 
+ * name String  (optional)
  * returns List
  **/
-exports.projectsGET = function(xAccessToken) {
+exports.projectsGET = function(xAccessToken,name) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = [
-      {
-        unhealthySuites: 20,
-        healtyFailedLevel: 5,
-        healthyDisabledLevel: 10,
-        name: "Project name 1",
-        projectId: "project1",
-        healthySkippedLevel: 5,
-        healthySuites: 300
-      },
-      {
-        unhealthySuites: 2,
-        healtyFailedLevel: 5,
-        healthyDisabledLevel: 10,
-        name: "Project name 2",
-        projectId: "project2",
-        healthySkippedLevel: 5,
-        healthySuites: 45
-      }
-    ];
+    examples['application/json'] = [ {
+  "unhealthySuites" : 2,
+  "healtyFailedLevel" : 5,
+  "healthyDisabledLevel" : 10,
+  "name" : "Project name 1",
+  "projectId" : "project1",
+  "healthySkippedLevel" : 5,
+  "healthySuites" : 30
+}, {
+  "unhealthySuites" : 2,
+  "healtyFailedLevel" : 5,
+  "healthyDisabledLevel" : 10,
+  "name" : "Project name 1",
+  "projectId" : "project1",
+  "healthySkippedLevel" : 5,
+  "healthySuites" : 30
+} ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Options operation
+ * Options operation 
  *
+ * xAccessToken String 
+ * projectId String 
  * no response value expected for this operation
  **/
-exports.projectsOPTIONS = function() {
+exports.projectsOPTIONS = function(xAccessToken,projectId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Gets the suites that have run for a given project
+ * Creates a project 
  *
- * xAccessToken String
- * projectId String
- * prevRuns Integer  (optional)
- * returns List
+ * xAccessToken String 
+ * project Projects 
+ * returns Projects
  **/
-exports.projectsProjectIdSuitesGET = function(
-  xAccessToken,
-  projectId,
-  prevRuns
-) {
+exports.projectsPOST = function(xAccessToken,project) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = [
-      {
-        skippedTests: 3,
-        suiteId: "suite1",
-        disabledTests: 3,
-        failingTests: 4,
-        passingTests: 100,
-        name: "Suite name 1",
-        previousSuiteIds: ["suite1Run1", "suite1Run2"]
-      },
-      {
-        skippedTests: 3,
-        suiteId: "suite2",
-        disabledTests: 3,
-        failingTests: 4,
-        passingTests: 100,
-        name: "Suite name 2",
-        previousSuiteIds: ["suite2Run1", "suite2Run2"]
-      }
-    ];
+    examples['application/json'] = {
+  "unhealthySuites" : 2,
+  "healtyFailedLevel" : 5,
+  "healthyDisabledLevel" : 10,
+  "name" : "Project name 1",
+  "projectId" : "project1",
+  "healthySkippedLevel" : 5,
+  "healthySuites" : 30
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Options operation
+ * Deletes a project 
  *
- * projectId String
+ * xAccessToken String 
+ * projectId String 
+ * no response value expected for this operation
+ **/
+exports.projectsProjectIdDELETE = function(xAccessToken,projectId) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+
+/**
+ * Gets one project 
+ *
+ * projectId String 
+ * xAccessToken String 
+ * returns Projects
+ **/
+exports.projectsProjectIdGET = function(projectId,xAccessToken) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "unhealthySuites" : 2,
+  "healtyFailedLevel" : 5,
+  "healthyDisabledLevel" : 10,
+  "name" : "Project name 1",
+  "projectId" : "project1",
+  "healthySkippedLevel" : 5,
+  "healthySuites" : 30
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Options operation 
+ *
+ * projectId String 
+ * no response value expected for this operation
+ **/
+exports.projectsProjectIdOPTIONS = function(projectId) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+
+/**
+ * Updates a project 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * project Projects 
+ * returns Projects
+ **/
+exports.projectsProjectIdPUT = function(xAccessToken,projectId,project) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "unhealthySuites" : 2,
+  "healtyFailedLevel" : 5,
+  "healthyDisabledLevel" : 10,
+  "name" : "Project name 1",
+  "projectId" : "project1",
+  "healthySkippedLevel" : 5,
+  "healthySuites" : 30
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Gets the suites that have run for a given project 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * prevRuns Integer  (optional)
+ * name String  (optional)
+ * returns List
+ **/
+exports.projectsProjectIdSuitesGET = function(xAccessToken,projectId,prevRuns,name) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "skippedTests" : 3,
+  "suiteId" : "suite1",
+  "disabledTests" : 3,
+  "failingTests" : 4,
+  "passingTests" : 100,
+  "name" : "Suite name 1",
+  "previousSuiteIds" : [ "", "" ]
+}, {
+  "skippedTests" : 3,
+  "suiteId" : "suite1",
+  "disabledTests" : 3,
+  "failingTests" : 4,
+  "passingTests" : 100,
+  "name" : "Suite name 1",
+  "previousSuiteIds" : [ "", "" ]
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Options operation 
+ *
+ * projectId String 
  * no response value expected for this operation
  **/
 exports.projectsProjectIdSuitesOPTIONS = function(projectId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Gets the tests that have run for a given suite
+ * Creates a suite for a given project 
  *
- * projectId String
- * suiteId String
- * suiteRunId String
- * returns List
+ * xAccessToken String 
+ * projectId String 
+ * suite Suites 
+ * no response value expected for this operation
  **/
-exports.projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsGET = function(
-  projectId,
-  suiteId,
-  suiteRunId
-) {
+exports.projectsProjectIdSuitesPOST = function(xAccessToken,projectId,suite) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+
+/**
+ * Deletes a suite 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * no response value expected for this operation
+ **/
+exports.projectsProjectIdSuitesSuiteIdDELETE = function(xAccessToken,projectId,suiteId) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+
+/**
+ * Gets one suite 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * returns Suites
+ **/
+exports.projectsProjectIdSuitesSuiteIdGET = function(xAccessToken,projectId,suiteId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = [
-      {
-        log: "Test passed",
-        SuiteRunId: "suite1Run1",
-        testId: "test1",
-        dateRun: "2000-01-23T04:56:07.000+00:00",
-        disabled: false,
-        passed: true,
-        skipped: false
-      },
-      {
-        log: "Test failed",
-        SuiteRunId: "suite1Run2",
-        testId: "test1",
-        dateRun: "2000-01-22T04:56:07.000+00:00",
-        disabled: false,
-        passed: false,
-        skipped: false
-      }
-    ];
+    examples['application/json'] = {
+  "skippedTests" : 3,
+  "suiteId" : "suite1",
+  "disabledTests" : 3,
+  "failingTests" : 4,
+  "passingTests" : 100,
+  "name" : "Suite name 1",
+  "previousSuiteIds" : [ "", "" ]
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Options operation
+ * Options operation 
  *
- * projectId String
- * suiteId String
- * suiteRunId String
+ * projectId String 
+ * suiteId String 
  * no response value expected for this operation
  **/
-exports.projectsProjectIdSuitesSuiteIdSuiteRunIdTestRunsOPTIONS = function(
-  projectId,
-  suiteId,
-  suiteRunId
-) {
+exports.projectsProjectIdSuitesSuiteIdOPTIONS = function(projectId,suiteId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Gets the tests that have run for a given suite
+ * Updates a suite 
  *
- * xAccessToken String
- * projectId String
- * suiteId String
- * returns List
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * suite Suites 
+ * returns Suites
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsGET = function(
-  xAccessToken,
-  projectId,
-  suiteId
-) {
+exports.projectsProjectIdSuitesSuiteIdPUT = function(xAccessToken,projectId,suiteId,suite) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = [
-      {
-        currentPassed: false,
-        disable: false,
-        name: "Test Name 1",
-        testId: "test1",
-        skip: false,
-        rerun: false,
-        previousSuiteIds: ["suite1Run1", "suite1Run2"]
-      },
-      {
-        currentPassed: true,
-        disable: false,
-        name: "Test Name 2",
-        testId: "test2",
-        skip: false,
-        rerun: false,
-        previousSuiteIds: ["suite1Run1", "suite1Run2"]
-      }
-    ];
+    examples['application/json'] = {
+  "skippedTests" : 3,
+  "suiteId" : "suite1",
+  "disabledTests" : 3,
+  "failingTests" : 4,
+  "passingTests" : 100,
+  "name" : "Suite name 1",
+  "previousSuiteIds" : [ "", "" ]
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Options operation
+ * Gets the test runs that ran as part of a particular suite run. 
  *
- * projectId String
- * suiteId String
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * suiteRunId String 
+ * returns List
+ **/
+exports.projectsProjectIdSuitesSuiteIdSuiteRunIdGET = function(xAccessToken,projectId,suiteId,suiteRunId) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+}, {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Gets the tests that have run for a given suite 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * name String  (optional)
+ * returns List
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsGET = function(xAccessToken,projectId,suiteId,name) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "currentPassed" : false,
+  "disable" : false,
+  "name" : "Test Name 1",
+  "testId" : "test1",
+  "skip" : false,
+  "rerun" : false
+}, {
+  "currentPassed" : false,
+  "disable" : false,
+  "name" : "Test Name 1",
+  "testId" : "test1",
+  "skip" : false,
+  "rerun" : false
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Options operation 
+ *
+ * projectId String 
+ * suiteId String 
  * no response value expected for this operation
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsOPTIONS = function(
-  projectId,
-  suiteId
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsOPTIONS = function(projectId,suiteId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Options operation
+ * Creates a test that runs for a given suite 
  *
- * projectId String
- * suiteId String
- * testId String
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * test Tests 
+ * returns List
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsPOST = function(xAccessToken,projectId,suiteId,test) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "currentPassed" : false,
+  "disable" : false,
+  "name" : "Test Name 1",
+  "testId" : "test1",
+  "skip" : false,
+  "rerun" : false
+}, {
+  "currentPassed" : false,
+  "disable" : false,
+  "name" : "Test Name 1",
+  "testId" : "test1",
+  "skip" : false,
+  "rerun" : false
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Deletes a test 
+ *
+ * projectId String 
+ * suiteId String 
+ * testId String 
  * no response value expected for this operation
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdDisableOPTIONS = function(
-  projectId,
-  suiteId,
-  testId
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdDELETE = function(projectId,suiteId,testId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Disables the test from running
+ * Options operation 
  *
- * xAccessToken String
- * projectId String
- * suiteId String
- * testId String
+ * projectId String 
+ * suiteId String 
+ * testId String 
+ * no response value expected for this operation
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdDisableOPTIONS = function(projectId,suiteId,testId) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+
+/**
+ * Disables the test from running 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * testId String 
  * prevRuns Integer  (optional)
  * returns List
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdDisablePOST = function(
-  xAccessToken,
-  projectId,
-  suiteId,
-  testId,
-  prevRuns
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdDisablePOST = function(xAccessToken,projectId,suiteId,testId,prevRuns) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = [
-      {
-        log: "Test passed",
-        SuiteRunId: "suite1Run1",
-        testId: "test1",
-        dateRun: "2000-01-23T04:56:07.000+00:00",
-        disabled: false,
-        passed: true,
-        skipped: false
-      },
-      {
-        log: "Test failed",
-        SuiteRunId: "suite1Run1",
-        testId: "test2",
-        dateRun: "2000-01-22T04:56:07.000+00:00",
-        disabled: false,
-        passed: false,
-        skipped: false
-      }
-    ];
+    examples['application/json'] = [ {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+}, {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+} ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Options operation
+ * Options operation 
  *
- * projectId String
- * suiteId String
- * testId String
+ * projectId String 
+ * suiteId String 
+ * testId String 
  * no response value expected for this operation
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdEnableOPTIONS = function(
-  projectId,
-  suiteId,
-  testId
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdEnableOPTIONS = function(projectId,suiteId,testId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Disables the test from running
+ * Disables the test from running 
  *
- * xAccessToken String
- * projectId String
- * suiteId String
- * testId String
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * testId String 
  * returns List
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdEnablePOST = function(
-  xAccessToken,
-  projectId,
-  suiteId,
-  testId
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdEnablePOST = function(xAccessToken,projectId,suiteId,testId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = [
-      {
-        log: "Test passed",
-        SuiteRunId: "suite1Run2",
-        testId: "test1",
-        dateRun: "2000-01-23T04:56:07.000+00:00",
-        disabled: false,
-        passed: true,
-        skipped: false
-      },
-      {
-        log: "Test passed",
-        SuiteRunId: "suiteRun1",
-        testId: "test1",
-        dateRun: "2000-01-23T04:56:07.000+00:00",
-        disabled: false,
-        passed: true,
-        skipped: false
-      }
-    ];
+    examples['application/json'] = [ {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+}, {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+} ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Options operation
+ * Gets one test 
  *
- * projectId String
- * suiteId String
- * testId String
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * testId String 
+ * returns Tests
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdGET = function(xAccessToken,projectId,suiteId,testId) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "currentPassed" : false,
+  "disable" : false,
+  "name" : "Test Name 1",
+  "testId" : "test1",
+  "skip" : false,
+  "rerun" : false
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Options operation 
+ *
+ * projectId String 
+ * suiteId String 
+ * testId String 
  * no response value expected for this operation
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdRerunOPTIONS = function(
-  projectId,
-  suiteId,
-  testId
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdOPTIONS = function(projectId,suiteId,testId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Disables the test from running
+ * Updates a test 
  *
- * xAccessToken String
- * projectId String
- * suiteId String
- * testId String
- * returns List
+ * projectId String 
+ * suiteId String 
+ * testId String 
+ * test Tests 
+ * returns Tests
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdRerunPOST = function(
-  xAccessToken,
-  projectId,
-  suiteId,
-  testId
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdPUT = function(projectId,suiteId,testId,test) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = [
-      {
-        log: "Test passed",
-        SuiteRunId: "suiteRun1",
-        testId: "test1",
-        dateRun: "2000-01-23T04:56:07.000+00:00",
-        disabled: false,
-        passed: true,
-        skipped: false
-      },
-      {
-        log: "Test passed",
-        SuiteRunId: "suiteRun1",
-        testId: "test1",
-        dateRun: "2000-01-23T04:56:07.000+00:00",
-        disabled: false,
-        passed: true,
-        skipped: false
-      }
-    ];
+    examples['application/json'] = {
+  "currentPassed" : false,
+  "disable" : false,
+  "name" : "Test Name 1",
+  "testId" : "test1",
+  "skip" : false,
+  "rerun" : false
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Gets the tests that have run for a given suite
+ * Options operation 
  *
- * xAccessToken String
- * projectId String
- * suiteId String
- * testId String
- * returns List
- **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsGET = function(
-  xAccessToken,
-  projectId,
-  suiteId,
-  testId
-) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples["application/json"] = [
-      {
-        log: "Test passed",
-        SuiteRunId: "suite1Run1",
-        testId: "test1",
-        dateRun: "2000-01-23T04:56:07.000+00:00",
-        disabled: false,
-        passed: true,
-        skipped: false
-      },
-      {
-        log: "Test failed",
-        SuiteRunId: "suite1Run2",
-        testId: "test2",
-        dateRun: "2000-01-22T04:56:07.000+00:00",
-        disabled: false,
-        passed: false,
-        skipped: false
-      }
-    ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-};
-
-/**
- * Options operation
- *
- * projectId String
- * suiteId String
- * testId String
+ * projectId String 
+ * suiteId String 
+ * testId String 
  * no response value expected for this operation
  **/
-exports.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsOPTIONS = function(
-  projectId,
-  suiteId,
-  testId
-) {
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdRerunOPTIONS = function(projectId,suiteId,testId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Options operation
+ * Disables the test from running 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * testId String 
+ * returns List
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdRerunPOST = function(xAccessToken,projectId,suiteId,testId) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+}, {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Gets the runs for a given test. 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * testId String 
+ * returns List
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsGET = function(xAccessToken,projectId,suiteId,testId) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+}, {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Options operation 
+ *
+ * projectId String 
+ * suiteId String 
+ * testId String 
+ * no response value expected for this operation
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsOPTIONS = function(projectId,suiteId,testId) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+
+/**
+ * Creates a test run 
+ *
+ * xAccessToken String 
+ * projectId String 
+ * suiteId String 
+ * testId String 
+ * returns TestRuns
+ **/
+exports.projectsProjectIdSuitesSuiteIdTestsTestIdTestRunsPOST = function(xAccessToken,projectId,suiteId,testId) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "log" : "Test passed",
+  "suiteRunId" : "suiteRun1",
+  "testId" : "test1",
+  "dateRun" : "2000-01-23T04:56:07.000+00:00",
+  "disabled" : false,
+  "passed" : true,
+  "skipped" : false
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Options operation 
  *
  * no response value expected for this operation
  **/
@@ -486,28 +781,30 @@ exports.usersLoginOPTIONS = function() {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Logs in a user so they can see their projects.
+ * Logs in a user so they can see their projects. 
  *
- * user Users
+ * user Users 
  * returns String
  **/
 exports.usersLoginPOST = function(user) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = '"sampleToken"';
+    examples['application/json'] = "sampleToken";
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Options operation
+ * Options operation 
  *
  * no response value expected for this operation
  **/
@@ -515,22 +812,24 @@ exports.usersLogoutOPTIONS = function() {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Logs a user out.
+ * Logs a user out. 
  *
- * xAccessToken String
+ * xAccessToken String 
  * no response value expected for this operation
  **/
 exports.usersLogoutPOST = function(xAccessToken) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Options operation
+ * Options operation 
  *
  * no response value expected for this operation
  **/
@@ -538,78 +837,83 @@ exports.usersOPTIONS = function() {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Creates a user and authorizes that user for a list of projects.
+ * Creates a user and authorizes that user for a list of projects. 
  *
- * xAccessToken String
- * user Users
+ * xAccessToken String 
+ * user Users 
  * returns Users
  **/
-exports.usersPOST = function(xAccessToken, user) {
+exports.usersPOST = function(xAccessToken,user) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = {
-      password: "password",
-      admin: true,
-      username: "username",
-      authorizedProjects: "authorizedProjects"
-    };
+    examples['application/json'] = {
+  "password" : "password",
+  "admin" : true,
+  "username" : "username",
+  "authorizedProjects" : "authorizedProjects"
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
 
 /**
- * Deletes a user.
+ * Deletes a user. 
  *
- * xAccessToken String
- * username String
+ * xAccessToken String 
+ * username String 
  * no response value expected for this operation
  **/
-exports.usersUsernameDELETE = function(xAccessToken, username) {
+exports.usersUsernameDELETE = function(xAccessToken,username) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Options operation
+ * Options operation 
  *
- * username String
+ * username String 
  * no response value expected for this operation
  **/
 exports.usersUsernameOPTIONS = function(username) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-};
+}
+
 
 /**
- * Updates a user's password, admin status, or list of projects.
+ * Updates a user's password, admin status, or list of projects. 
  *
- * xAccessToken String
- * username String
- * user Users
+ * xAccessToken String 
+ * username String 
+ * user Users 
  * returns Users
  **/
-exports.usersUsernamePUT = function(xAccessToken, username, user) {
+exports.usersUsernamePUT = function(xAccessToken,username,user) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples["application/json"] = {
-      password: "password",
-      admin: true,
-      username: "username",
-      authorizedProjects: "authorizedProjects"
-    };
+    examples['application/json'] = {
+  "password" : "password",
+  "admin" : true,
+  "username" : "username",
+  "authorizedProjects" : "authorizedProjects"
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-};
+}
+
