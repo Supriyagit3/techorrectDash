@@ -3,18 +3,20 @@
     <div class="col-xs-12">
       <ul class="breadcrumb">
         <li class="breadcrumb-item"><a ui-sref="app">Home</a></li>
-        <li class="breadcrumb-item active">Project</li>
+        <li class="breadcrumb-item active">{{project.name}}</li>
       </ul>
     </div>
   </div>
 
   <div class="row row-content">
-    <div class="col-xs-12 col-sm-3">
-      <h3>Suites</h3>
+    <div class="col-12">
+      <br>
+      <h3>Project: {{project.name}}</h3>
       <hr>
     </div>
-
-    <div class="col-xs-12 col-sm-9 col-sm-pull-3">
+  </div>
+  <div class="row row-content">
+    <div class="col-12">
       <div ng-if="!showSuites">
         <h3>{{suitesMessage}}</h3>
       </div>
@@ -54,4 +56,7 @@
       </div>
     </div>
   </div>
+  <br>
+  <br>
+  <br>
 </div>

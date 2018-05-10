@@ -3,19 +3,21 @@
     <div class="col-xs-12">
       <ul class="breadcrumb">
         <li class="breadcrumb-item"><a ui-sref="app">Home</a></li>
-        <li class="breadcrumb-item"><a ui-sref="app.project">Project</a></li>
-        <li class="breadcrumb-item active">Suite</li>
+        <li class="breadcrumb-item"><a ui-sref="app.project">{{project.name}}</a></li>
+        <li class="breadcrumb-item active">{{suite.name}}</li>
       </ul>
     </div>
   </div>
 
   <div class="row row-content">
-    <div class="col-xs-12 col-sm-3">
-      <h3>Tests</h3>
+    <div class="col-12">
+      <br>
+      <h3>Suite: {{suite.name}}</h3>
       <hr>
     </div>
-
-    <div class="col-xs-12 col-sm-9 col-sm-pull-3">
+  </div>
+  <div class="row row-content">
+    <div class="col-12">
       <div ng-if="!showTests">
         <h3>{{testMessage}}</h3>
       </div>
@@ -24,23 +26,33 @@
           <thead>
             <tr>
               <th>Test Name</th>
-              <th>Curently passing</th>
-              <th>Skipped</th>
-              <th></th>
-              <th></th>
+              <th style="width: 90px">Curently passing</th>
+              <th style="width: 90px">Skipped</th>
+              <th style="width: 90px"></th>
+              <th style="width: 90px"></th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="test in tests">
-              <td><a ui-sref="app.project.suite.test({testId: test._id, testName: test.name})">{{test.name}}</a></td>
+              <td style="word-wrap: break-word;max-width: 160px;"><a ui-sref="app.project.suite.test({testId: test._id, testName: test.name})">{{test.name}}</a></td>
               <td>{{test.currentPassed}}</td>
               <td>{{test.skip}}</td>
-              <td>Rerun</td>
-              <td>Disable</td>
+              <td><a ng-click="rerun(test._id)" href>Rerun</a></td>
+              <td><a ng-click="disable(test._id)" href>Disable</a></td>
             </tr>
           </tbody>
         </table>
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link" ng-click="prev10pages()">Prev</a></li>
+            <li ng-if="n != currentPage" class="page-item" ng-repeat="n in range(listMin, currentPage, 1)"><a class="page-link" ng-click="goToPage(n)">{{n}}</a></li>
+            <li ng-if="n == currentPage" class="page-item active" ng-repeat="n in range(listMin, listMax, 1)"><a class="page-link" href>{{n}}</a></li>
+            <li ng-if="n != currentPage" class="page-item" ng-repeat="n in range(currentPage, listMax, 1)"><a class="page-link" ng-click="goToPage(n)">{{n}}</a></li>
+            <li class="page-item"><a class="page-link" ng-click="next10pages()">Next</a></li>
+        </ul>
       </div>
     </div>
   </div>
+  <br>
+  <br>
+  <br>
 </div>

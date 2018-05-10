@@ -3,21 +3,23 @@
     <div class="col-xs-12">
       <ul class="breadcrumb">
         <li class="breadcrumb-item"><a ui-sref="app">Home</a></li>
-        <li class="breadcrumb-item"><a ui-sref="app.project">Project</a></li>
-        <li class="breadcrumb-item"><a ui-sref="app.project.suite">Suite</a></li>
-        <li class="breadcrumb-item active">Test</li>
+        <li class="breadcrumb-item"><a ui-sref="app.project">{{project.name}}</a></li>
+        <li class="breadcrumb-item"><a ui-sref="app.project.suite">{{suite.name}}</a></li>
+        <li class="breadcrumb-item active">{{test.name}}</li>
       </ul>
     </div>
   </div>
 
   <div class="row row-content">
-    <div class="col-xs-12 col-sm-3">
-      <h3>Test Runs</h3>
+    <div class="col-12">
+      <br>
+      <h3>Test Runs:</h3>
+       {{test.name}}
       <hr>
-      <h2>{{testName}}</h2>
     </div>
-
-    <div class="col-xs-12 col-sm-9 col-sm-pull-3">
+  </div>
+  <div class="row row-content">
+    <div class="col-12">
       <div ng-if="!showTestRuns">
         <h3>{{testRunMessage}}</h3>
       </div>
@@ -25,10 +27,10 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Date Run</th>
-              <th>Passed</th>
-              <th>Skipped</th>
-              <th>Disabled</th>
+              <th style="width: 240px">Date Run</th>
+              <th style="width: 90px">Passed</th>
+              <th style="width: 90px">Skipped</th>
+              <th style="width: 90px">Disabled</th>
               <th>Log</th>
             </tr>
           </thead>
@@ -38,11 +40,14 @@
               <td>{{testRun.passed}}</td>
               <td>{{testRun.skipped}}</td>
               <td>{{testRun.disabled}}</td>
-              <td>{{testRun.log}}</td>
+              <td style="word-wrap: break-word;max-width: 160px;">{{testRun.log}}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
+  <br>
+  <br>
+  <br>
 </div>
