@@ -26,11 +26,23 @@ angular
     "$scope",
     "$stateParams",
     "SuiteFactory",
-    function($scope, $stateParams, SuiteFactory) {
+    "ProjectFactory",
+    function($scope, $stateParams, SuiteFactory, ProjectFactory) {
+      $scope.project = ProjectFactory.get(
+        { projectId: $stateParams.projectId },
+        function(response) {
+          $scope.project = response;
+        },
+        function(response) {
+          $scope.suiteMessage =
+            "Error: " + response.status + " " + response.statusText;
+        }
+      );
+
       $scope.suites = {};
       $scope.showSuites = false;
       $scope.suiteMessage = "Loading ...";
-      $scope.dish = SuiteFactory.query(
+      $scope.suites = SuiteFactory.query(
         { projectId: $stateParams.projectId },
         function(response) {
           $scope.suites = response;
@@ -48,21 +60,112 @@ angular
     "$scope",
     "$stateParams",
     "TestFactory",
-    function($scope, $stateParams, TestFactory) {
-      $scope.tests = {};
-      $scope.showTests = false;
-      $scope.testMessage = "Loading ...";
-      $scope.dish = TestFactory.query(
-        { projectId: $stateParams.projectId, suiteId: $stateParams.suiteId },
+    "SuiteFactory",
+    "ProjectFactory",
+    function($scope, $stateParams, TestFactory, SuiteFactory, ProjectFactory) {
+      $scope.project = ProjectFactory.get(
+        { projectId: $stateParams.projectId },
         function(response) {
-          $scope.tests = response;
-          $scope.showTests = true;
+          $scope.project = response;
         },
         function(response) {
           $scope.testMessage =
             "Error: " + response.status + " " + response.statusText;
         }
       );
+
+      $scope.suite = SuiteFactory.get(
+        {
+          projectId: $stateParams.projectId,
+          suiteId: $stateParams.suiteId
+        },
+        function(response) {
+          $scope.suite = response;
+        },
+        function(response) {
+          $scope.testMessage =
+            "Error: " + response.status + " " + response.statusText;
+        }
+      );
+
+      getTests = function() {
+        $scope.showTests = false;
+        $scope.testMessage = "Loading ...";
+        $scope.tests = TestFactory.get(
+          {
+            projectId: $stateParams.projectId,
+            suiteId: $stateParams.suiteId,
+            page: $scope.currentPage,
+            perPage: $scope.perPage
+          },
+          function(response) {
+            $scope.tests = response.tests;
+            $scope.currentPage = response.current;
+            $scope.totalPages = response.pages;
+            $scope.showTests = true;
+          },
+          function(response) {
+            $scope.testMessage =
+              "Error: " + response.status + " " + response.statusText;
+          }
+        );
+      };
+
+      //Pagination vars
+      $scope.currentPage = 1;
+      $scope.perPage = 25;
+      $scope.maxSize = 10;
+      $scope.totalPages = 1;
+      $scope.listMin = $scope.currentPage;
+      $scope.listMax = $scope.listMin + $scope.maxSize - 1;
+
+      $scope.tests = {};
+      getTests();
+
+      $scope.rerun = function(testId) {
+        console.log("Rerun test id:" + testId);
+      };
+
+      $scope.disable = function(testId) {
+        console.log("Disable test id: " + testId);
+      };
+
+      $scope.range = function(min, max, step) {
+        console.log(min + max + step);
+        if (!step) {
+          step = 1;
+        }
+        var range = [];
+        for (var i = min; i <= max; i += step) {
+          range.push(i);
+        }
+        return range;
+      };
+
+      $scope.goToPage = function(page) {
+        $scope.currentPage = page;
+        $scope.perPage = 25;
+
+        getTests();
+      };
+
+      $scope.next10pages = function() {
+        $scope.currentPage = $scope.listMin + $scope.maxSize;
+        $scope.listMin = $scope.listMin + $scope.maxSize;
+        $scope.listMax = $scope.listMax + $scope.maxSize;
+        $scope.perPage = 25;
+
+        getTests();
+      };
+
+      $scope.prev10pages = function() {
+        $scope.currentPage = $scope.listMin - 1;
+        $scope.listMin = $scope.listMin - $scope.maxSize;
+        $scope.listMax = $scope.listMax - $scope.maxSize;
+        $scope.perPage = 25;
+
+        getTests();
+      };
     }
   ])
 
@@ -70,11 +173,61 @@ angular
     "$scope",
     "$stateParams",
     "TestRunFactory",
-    function($scope, $stateParams, TestRunFactory) {
+    "TestFactory",
+    "SuiteFactory",
+    "ProjectFactory",
+    function(
+      $scope,
+      $stateParams,
+      TestRunFactory,
+      TestFactory,
+      SuiteFactory,
+      ProjectFactory
+    ) {
+      $scope.project = ProjectFactory.get(
+        { projectId: $stateParams.projectId },
+        function(response) {
+          $scope.project = response;
+        },
+        function(response) {
+          $scope.testRunMessage =
+            "Error: " + response.status + " " + response.statusText;
+        }
+      );
+
+      $scope.suite = SuiteFactory.get(
+        {
+          projectId: $stateParams.projectId,
+          suiteId: $stateParams.suiteId
+        },
+        function(response) {
+          $scope.suite = response;
+        },
+        function(response) {
+          $scope.testRunMessage =
+            "Error: " + response.status + " " + response.statusText;
+        }
+      );
+
+      $scope.test = TestFactory.get(
+        {
+          projectId: $stateParams.projectId,
+          suiteId: $stateParams.suiteId,
+          testId: $stateParams.testId
+        },
+        function(response) {
+          $scope.test = response;
+        },
+        function(response) {
+          $scope.testRunMessage =
+            "Error: " + response.status + " " + response.statusText;
+        }
+      );
+
       $scope.testRuns = {};
       $scope.showTestRuns = false;
       $scope.testRunMessage = "Loading ...";
-      $scope.dish = TestRunFactory.query(
+      $scope.testRuns = TestRunFactory.query(
         {
           projectId: $stateParams.projectId,
           suiteId: $stateParams.suiteId,
@@ -100,7 +253,7 @@ angular
       $scope.suiteRuns = {};
       $scope.showSuiteRuns = false;
       $scope.suiteRunMessage = "Loading ...";
-      $scope.dish = SuiteRunFactory.query(
+      $scope.suiteRuns = SuiteRunFactory.query(
         {
           projectId: $stateParams.projectId,
           suiteId: $stateParams.suiteId,

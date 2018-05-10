@@ -8,7 +8,7 @@ angular
     "$resource",
     "baseURL",
     function($resource, baseURL) {
-      return $resource(baseURL + "projects", null, {
+      return $resource(baseURL + "projects/:projectId/", null, {
         update: {
           method: "PUT"
         }
@@ -20,7 +20,7 @@ angular
     "$resource",
     "baseURL",
     function($resource, baseURL) {
-      return $resource(baseURL + "projects/:projectId/suites", null, {
+      return $resource(baseURL + "projects/:projectId/suites/:suiteId", null, {
         update: {
           method: "PUT"
         }
@@ -33,7 +33,7 @@ angular
     "baseURL",
     function($resource, baseURL) {
       return $resource(
-        baseURL + "projects/:projectId/suites/:suiteId/tests",
+        baseURL + "projects/:projectId/suites/:suiteId/tests/:testId",
         null,
         {
           update: {

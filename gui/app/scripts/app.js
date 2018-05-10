@@ -25,7 +25,7 @@ angular
 
       // route for the project page
       .state("app.project", {
-        url: "projects/:projectId",
+        url: "projects/:projectId/",
         views: {
           "content@": {
             templateUrl: "views/project.html",
@@ -36,7 +36,7 @@ angular
 
       // route for the suite page
       .state("app.project.suite", {
-        url: "/suites/:suiteId",
+        url: "suites/:suiteId/",
         views: {
           "content@": {
             templateUrl: "views/suite.html",
@@ -47,7 +47,7 @@ angular
 
       // route for the suite page
       .state("app.project.suite.test", {
-        url: "/:testId/",
+        url: "tests/:testId/",
         views: {
           "content@": {
             templateUrl: "views/test.html",
@@ -58,7 +58,7 @@ angular
 
       // route for the suite page
       .state("app.project.suite.suiteHistory", {
-        url: "/history",
+        url: "history",
         views: {
           "content@": {
             templateUrl: "views/suiteHistory.html",
