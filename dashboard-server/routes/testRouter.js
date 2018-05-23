@@ -24,7 +24,7 @@ testRouter
       var perPage = 25;
     }
 
-    var skipAmount = perPage * page - 1;
+    var skipAmount = perPage * (page - 1);
 
     queryParams = {
       projectId: req.params.projectId,
@@ -36,14 +36,18 @@ testRouter
       .skip(skipAmount)
       .limit(perPage)
       .exec(function(err, tests) {
-        Test.count().exec(function(err, count) {
-          if (err) return next(err);
-          res.json({
-            tests: tests,
-            current: page,
-            pages: Math.ceil(count / perPage)
+        if (err) return next(err);
+        if (req.query.name) {
+          res.json(tests);
+        } else {
+          Test.count(queryParams).exec(function(err, count) {
+            res.json({
+              tests: tests,
+              current: page,
+              pages: Math.ceil(count / perPage)
+            });
           });
-        });
+        }
       });
   })
 
