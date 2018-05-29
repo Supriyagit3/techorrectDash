@@ -12,10 +12,40 @@ suiteRouter
   .route("/")
 
   .get(function(req, res, next) {
-    Suite.find({ projectId: req.params.projectId }, function(err, suite) {
-      if (err) throw err;
-      res.json(suite);
-    });
+    if (req.query.page) {
+      var page = parseInt(req.query.page);
+    } else {
+      var page = 1;
+    }
+
+    if (req.query.perPage) {
+      var perPage = parseInt(req.query.perPage);
+    } else {
+      var perPage = 25;
+    }
+
+    var skipAmount = perPage * (page - 1);
+
+    if (req.query.name) req.params.name = req.query.name;
+
+    Suite.find(req.params)
+      .skip(skipAmount)
+      .limit(perPage)
+      .exec(function(err, suites) {
+        if (err) return next(err);
+        if (req.query.name) {
+          res.json(suites);
+        } else {
+          Suite.count(req.params).exec(function(err, count) {
+            // TODO: calculate passing, failing, skipped and disabled tests.
+            res.json({
+              suites: suites,
+              current: page,
+              pages: Math.ceil(count / perPage)
+            });
+          });
+        }
+      });
   })
 
   .post(function(req, res, next) {

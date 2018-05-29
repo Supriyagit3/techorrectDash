@@ -12,17 +12,35 @@ testRunRouter
   .route("/")
 
   .get(function(req, res, next) {
-    TestRun.find(
-      {
-        projectId: req.params.projectId,
-        suiteId: req.params.suiteId,
-        testId: req.params.testId
-      },
-      function(err, testRun) {
+    if (req.query.page) {
+      var page = parseInt(req.query.page);
+    } else {
+      var page = 1;
+    }
+
+    if (req.query.perPage) {
+      var perPage = parseInt(req.query.perPage);
+    } else {
+      var perPage = 25;
+    }
+
+    var skipAmount = perPage * (page - 1);
+
+    TestRun.find(req.params)
+      .sort({ createdAt: -1 })
+      .skip(skipAmount)
+      .limit(perPage)
+      .exec(function(err, testRuns) {
         if (err) throw err;
-        res.json(testRun);
-      }
-    );
+
+        TestRun.count(req.params).exec(function(err, count) {
+          res.json({
+            testRuns: testRuns,
+            current: page,
+            pages: Math.ceil(count / perPage)
+          });
+        });
+      });
   })
 
   .post(function(req, res, next) {

@@ -26,13 +26,9 @@ testRouter
 
     var skipAmount = perPage * (page - 1);
 
-    queryParams = {
-      projectId: req.params.projectId,
-      suiteId: req.params.suiteId
-    };
-    if (req.query.name) queryParams.name = req.query.name;
+    if (req.query.name) req.params.name = req.query.name;
 
-    Test.find(queryParams)
+    Test.find(req.params)
       .skip(skipAmount)
       .limit(perPage)
       .exec(function(err, tests) {
@@ -40,7 +36,7 @@ testRouter
         if (req.query.name) {
           res.json(tests);
         } else {
-          Test.count(queryParams).exec(function(err, count) {
+          Test.count(req.params).exec(function(err, count) {
             res.json({
               tests: tests,
               current: page,

@@ -12,10 +12,35 @@ projectRouter
   .route("/")
 
   .get(function(req, res, next) {
-    Project.find({}, function(err, project) {
-      if (err) throw err;
-      res.json(project);
-    });
+    if (req.query.page) {
+      var page = parseInt(req.query.page);
+    } else {
+      var page = 1;
+    }
+
+    if (req.query.perPage) {
+      var perPage = parseInt(req.query.perPage);
+    } else {
+      var perPage = 25;
+    }
+
+    var skipAmount = perPage * (page - 1);
+
+    Project.find({})
+      .skip(skipAmount)
+      .limit(perPage)
+      .exec(function(err, projects) {
+        if (err) throw err;
+
+        Project.count(req.params).exec(function(err, count) {
+          res.json({
+            // TODO: calculate healthy and unhealthy suites
+            projects: projects,
+            current: page,
+            pages: Math.ceil(count / perPage)
+          });
+        });
+      });
   })
 
   .post(function(req, res, next) {
