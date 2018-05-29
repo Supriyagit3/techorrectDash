@@ -23,10 +23,6 @@ var suiteSchema = new Schema(
       type: Number,
       required: true
     },
-    disabledTests: {
-      type: Number,
-      required: true
-    },
     previousSuiteIds: [String],
     projectId: {
       type: Schema.Types.ObjectId,
