@@ -55,5 +55,6 @@
   "bugs": {
     "url": "https://github.com/jlundy2/techorrectDash/issues"
   },
-  "homepage": "https://github.com/jlundy2/techorrectDash#readme"
+  "homepage": "https://github.com/jlundy2/techorrectDash#readme",
+  "dependencies": {}
 }

@@ -1,4 +1,4 @@
-<div class="container" ng-controller="ProjectController">
+<div class="container">
   <div class="row">
     <div class="col-xs-12">
       <ul class="breadcrumb">
@@ -27,7 +27,8 @@
         <table class="table">
           <thead>
             <tr>
-              <th style="width: 240px">Date Run</th>
+              <!-- TODO: class my table width -->
+              <th style="width: 160px">Date Run</th>
               <th style="width: 90px">Passed</th>
               <th style="width: 90px">Skipped</th>
               <th style="width: 90px">Disabled</th>
@@ -35,15 +36,24 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="testRun in testRuns">
-              <td>{{testRun.createdAt | date : 'medium'}}</td>
+            <tr ng-repeat="testRun in testRuns | orderBy:'-createdAt'">
+              <td>{{testRun.createdAt | date : 'short'}}</td>
               <td>{{testRun.passed}}</td>
               <td>{{testRun.skipped}}</td>
               <td>{{testRun.disabled}}</td>
-              <td style="word-wrap: break-word;max-width: 160px;">{{testRun.log}}</td>
+              <td style="max-width: 160px;white-space:pre-wrap">{{testRun.log}}</td>
             </tr>
           </tbody>
         </table>
+        <ul class="pagination justify-content-center">
+          <li ng-if="currentPage <= maxSize" class="page-item disabled"><a class="page-link">Prev</a></li>
+          <li ng-if="currentPage > maxSize" class="page-item"><a class="page-link" ng-click="prev10pages(currentPage, listMin, listMax, maxSize, perPage, getTestRunsNoScope)">Prev</a></li>
+          <li class="page-item" ng-repeat="n in range(listMin, currentPage - 1, 1)"><a class="page-link" ng-click="goToPage(currentPage, listMin, listMax, maxSize, perPage, n, getTestRunsNoScope)">{{n}}</a></li>
+          <li class="page-item active"><a class="page-link" href>{{currentPage}}</a></li>
+          <li class="page-item" ng-repeat="n in range(currentPage + 1, listMax, 1)"><a class="page-link" ng-click="goToPage(currentPage, listMin, listMax, maxSize, perPage, n, getTestRunsNoScope)">{{n}}</a></li>
+          <li ng-if="totalPages != listMax" class="page-item"><a class="page-link" ng-click="next10pages(currentPage, listMin, listMax, maxSize, perPage, getTestRunsNoScope)">Next</a></li>
+          <li ng-if="totalPages == listMax" class="page-item disabled"><a class="page-link">Next</a></li>
+        </ul>
       </div>
     </div>
   </div>

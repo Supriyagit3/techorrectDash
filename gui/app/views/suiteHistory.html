@@ -1,4 +1,4 @@
-<div class="container" ng-controller="ProjectController">
+<div class="container">
   <div class="row">
     <div class="col-xs-12">
       <ul class="breadcrumb">
@@ -20,26 +20,27 @@
     </div>
     <div ng-if="showTestRuns">
       <table class="table">
-          <thead>
-              <tr>
-                <th>Date Run</th>
-                <th>Test ID</th>
-                <th>Passed</th>
-                <th>Skipped</th>
-                <th>Disabled</th>
-                <th>Log</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr ng-repeat="testRun in testRuns">
-                <td>test {{testRun.createdAt | date : 'medium'}}</td>
-                <td>{{testRun._id}}</td>
-                <td>{{testRun.passed}}</td>
-                <td>{{testRun.skipped}}</td>
-                <td>{{testRun.disabled}}</td>
-                <td>{{testRun.log}}</td>
-              </tr>
-          </tbody>
+        <!-- TODO: class my table width -->
+        <thead>
+            <tr>
+              <th>Date Run</th>
+              <th>Test ID</th>
+              <th>Passed</th>
+              <th>Skipped</th>
+              <th>Disabled</th>
+              <th>Log</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="testRun in testRuns">
+              <td>test {{testRun.createdAt | date : 'medium'}}</td>
+              <td>{{testRun._id}}</td>
+              <td>{{testRun.passed}}</td>
+              <td>{{testRun.skipped}}</td>
+              <td>{{testRun.disabled}}</td>
+              <td>{{testRun.log}}</td>
+            </tr>
+        </tbody>
       </table>
     </div>
   </div>

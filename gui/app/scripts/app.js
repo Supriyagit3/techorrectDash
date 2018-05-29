@@ -1,7 +1,7 @@
 "use strict";
 
 angular
-  .module("techorrectDash", ["ui.router", "ngResource", "ngDialog"])
+  .module("techorrectDash", ["ui.router", "ngResource", "ngDialog", "chart.js"])
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
