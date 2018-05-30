@@ -23,24 +23,33 @@ var projectSchema = new Schema(
     }
   },
   {
-    timestamps: true,
-    toObject: { virtuals: true },
-    toJSON: { virtuals: true }
+    timestamps: true
   }
 );
 
-projectSchema.method("getHealthySuites", function() {
-  Suite.count({ projectId: this._id }, function(err, count) {
-    return count;
-  });
-});
+projectSchema.method("getSuiteCounts", function(cb) {
+  Suite.find({ projectId: this._id })
+    .exec(function(err, suites) {
+      if (err) throw err;
 
-projectSchema.virtual("healthySuites").get(function() {
-  return this.getHealthySuites();
-});
+      var unhealthyCounts = 0;
+      var skippedCounts = 0;
+      var disabledCounts = 0;
+      var healthyCounts = 0;
+      
+      suites.map(function(suite) {
+        if (suite.failingTests > this.healthyFailedLevel)
+          unhealthyCounts++;
+        else if (suite.skippedTests > this.healthySkippedLevel)
+          skippedCounts++;
+        else if (suite.disabledTests > this.healthyDisabledLevel)
+          disabledCounts++;
+        else
+          healthyCounts++;
+      });
 
-projectSchema.virtual("unhealthySuites").get(function() {
-  return 0;
+      return cb(unhealthyCounts, skippedCounts, disabledCounts, healthyCounts);
+    });
 });
 
 var Project = mongoose.model("Project", projectSchema);
