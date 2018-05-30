@@ -33,6 +33,7 @@ projectRouter
         if (err) throw err;
 
         Project.count(req.params).exec(function(err, count) {
+          console.log(projects[0].getHealthySuites());
           res.json({
             // TODO: calculate healthy and unhealthy suites
             projects: projects,

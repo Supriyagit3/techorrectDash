@@ -37,6 +37,7 @@ suiteRouter
           res.json(suites);
         } else {
           Suite.count(req.params).exec(function(err, count) {
+            if (err) throw err;
             // TODO: calculate passing, failing, skipped and disabled tests.
             res.json({
               suites: suites,
