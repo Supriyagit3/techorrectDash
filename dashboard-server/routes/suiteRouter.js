@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
 var Suite = require("../models/suite");
+var Verify = require("./verify");
 
 var suiteRouter = express.Router({ mergeParams: true });
 module.exports = suiteRouter;
@@ -10,6 +11,7 @@ suiteRouter.use(bodyParser.json());
 
 suiteRouter
   .route("/")
+  .all(Verify.verifyOrdinaryUser)
 
   .get(function(req, res, next) {
     if (req.query.page) {
@@ -48,7 +50,7 @@ suiteRouter
       });
   })
 
-  .post(function(req, res, next) {
+  .post(Verify.verifyAdmin, function(req, res, next) {
     req.body.projectId = req.params.projectId;
     Suite.create(req.body, function(err, suite) {
       if (err) throw err;
@@ -64,6 +66,7 @@ suiteRouter
 
 suiteRouter
   .route("/:suiteId")
+  .all(Verify.verifyOrdinaryUser)
 
   .get(function(req, res, next) {
     Suite.findById(req.params.suiteId, function(err, suite) {
@@ -72,7 +75,7 @@ suiteRouter
     });
   })
 
-  .put(function(req, res, next) {
+  .put(Verify.verifyAdmin, function(req, res, next) {
     Suite.findByIdAndUpdate(
       req.params.suiteId,
       { $set: req.body },
@@ -84,7 +87,7 @@ suiteRouter
     );
   })
 
-  .delete(function(req, res, next) {
+  .delete(Verify.verifyAdmin, function(req, res, next) {
     Suite.findByIdAndRemove(req.params.suiteId, function(err, resp) {
       if (err) return next(err);
       res.json(resp);

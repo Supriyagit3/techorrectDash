@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
 var Project = require("../models/project");
+var Verify = require("./verify");
 
 var projectRouter = express.Router();
 module.exports = projectRouter;
@@ -10,6 +11,7 @@ projectRouter.use(bodyParser.json());
 
 projectRouter
   .route("/")
+  .all(Verify.verifyOrdinaryUser)
 
   .get(function(req, res, next) {
     if (req.query.page) {
@@ -26,7 +28,9 @@ projectRouter
 
     var skipAmount = perPage * (page - 1);
 
-    Project.find({})
+    console.log(req.decoded);
+
+    Project.find({ _id: { $in: req.decoded.projects } })
       .skip(skipAmount)
       .limit(perPage)
       .exec(function(err, projects) {
@@ -43,7 +47,7 @@ projectRouter
       });
   })
 
-  .post(function(req, res, next) {
+  .post(Verify.verifyAdmin, function(req, res, next) {
     Project.create(req.body, function(err, project) {
       if (err) throw err;
       console.log("Project created!");
@@ -58,6 +62,7 @@ projectRouter
 
 projectRouter
   .route("/:projectId")
+  .all(Verify.verifyOrdinaryUser)
 
   .get(function(req, res, next) {
     Project.findById(req.params.projectId, function(err, project) {
@@ -66,7 +71,7 @@ projectRouter
     });
   })
 
-  .put(function(req, res, next) {
+  .put(Verify.verifyAdmin, function(req, res, next) {
     Project.findByIdAndUpdate(
       req.params.projectId,
       { $set: req.body },
@@ -78,7 +83,7 @@ projectRouter
     );
   })
 
-  .delete(function(req, res, next) {
+  .delete(Verify.verifyAdmin, function(req, res, next) {
     Project.findByIdAndRemove(req.params.projectId, function(err, resp) {
       if (err) return next(err);
       res.json(resp);

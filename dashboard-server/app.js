@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var passport = require("passport");
 var cors = require("cors");
 
 var corsOptions = {
@@ -17,6 +18,8 @@ var projectRouter = require("./routes/projectRouter");
 var suiteRouter = require("./routes/suiteRouter");
 var testRouter = require("./routes/testRouter");
 var testRunRouter = require("./routes/testRunRouter");
+
+var authenticate = require("./authenticate");
 
 var app = express();
 
@@ -42,6 +45,10 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 
 app.use(express.static(path.join(__dirname, "public")));
+
+// passport config
+var User = require("./models/user");
+app.use(passport.initialize());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

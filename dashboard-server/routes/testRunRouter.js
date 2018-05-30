@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
 var TestRun = require("../models/testRun");
+var Verify = require("./verify");
 
 var testRunRouter = express.Router({ mergeParams: true });
 module.exports = testRunRouter;
@@ -10,6 +11,7 @@ testRunRouter.use(bodyParser.json());
 
 testRunRouter
   .route("/")
+  .all(Verify.verifyOrdinaryUser)
 
   .get(function(req, res, next) {
     if (req.query.page) {
@@ -43,7 +45,7 @@ testRunRouter
       });
   })
 
-  .post(function(req, res, next) {
+  .post(Verify.verifyAdmin, function(req, res, next) {
     req.body.projectId = req.params.projectId;
     req.body.suiteId = req.params.suiteId;
     req.body.testId = req.params.testId;
