@@ -57,6 +57,7 @@ angular
         AuthFactory.logout();
         $scope.loggedIn = false;
         $scope.username = "";
+        $state.reload();
       };
 
       $rootScope.$on("login:Successful", function() {
@@ -69,6 +70,10 @@ angular
         $scope.username = AuthFactory.getUsername();
       });
 
+      $scope.$on("ngDialog.closed", function() {
+        $state.reload();
+      });
+
       $scope.stateis = function(curstate) {
         return $state.is(curstate);
       };
@@ -76,17 +81,18 @@ angular
   ])
 
   .controller("LoginController", [
+    "$state",
     "$scope",
     "ngDialog",
-    "$window",
+    "$localStorage",
     "AuthFactory",
-    function($scope, ngDialog, $window, AuthFactory) {
-      $scope.loginData = $window.localStorage.getItem("userinfo");
+    function($state, $scope, ngDialog, $localStorage, AuthFactory) {
+      $scope.loginData = $localStorage.getObject("userinfo", "{}");
 
       $scope.doLogin = function() {
-        if ($scope.rememberMe) {
-          $window.localStorage.setItem("userinfo", $scope.loginData);
-        }
+        if ($scope.rememberMe)
+          $localStorage.storeObject("userinfo", $scope.loginData);
+
         AuthFactory.login($scope.loginData);
 
         ngDialog.close();

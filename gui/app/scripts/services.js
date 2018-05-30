@@ -76,19 +76,63 @@ angular
     }
   ])
 
+  .factory("$localStorage", [
+    "$window",
+    function($window) {
+      return {
+        store: function(key, value) {
+          $window.localStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+          return $window.localStorage[key] || defaultValue;
+        },
+        remove: function(key) {
+          $window.localStorage.removeItem(key);
+        },
+        storeObject: function(key, value) {
+          $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key, defaultValue) {
+          return JSON.parse($window.localStorage[key] || defaultValue);
+        }
+      };
+    }
+  ])
+
   .factory("AuthFactory", [
     "$resource",
     "$http",
-    "$window",
+    "$localStorage",
     "$rootScope",
+    "$window",
     "baseURL",
     "ngDialog",
-    function($resource, $http, $window, $rootScope, baseURL, ngDialog) {
+    function(
+      $resource,
+      $http,
+      $localStorage,
+      $rootScope,
+      $window,
+      baseURL,
+      ngDialog
+    ) {
       var authFac = {};
       var TOKEN_KEY = "Token";
       var isAuthenticated = false;
       var username = "";
-      var authToken;
+      var authToken = undefined;
+
+      function loadUserCredentials() {
+        var credentials = $localStorage.getObject(TOKEN_KEY, "{}");
+        if (credentials.username != undefined) {
+          useCredentials(credentials);
+        }
+      }
+
+      function storeUserCredentials(credentials) {
+        $localStorage.storeObject(TOKEN_KEY, credentials);
+        useCredentials(credentials);
+      }
 
       function useCredentials(credentials) {
         isAuthenticated = true;
@@ -99,36 +143,22 @@ angular
         $http.defaults.headers.common["x-access-token"] = authToken;
       }
 
-      function loadUserCredentials() {
-        var credentials = $window.localStorage.getItem(TOKEN_KEY);
-        if (credentials !== null) {
-          useCredentials(credentials);
-        }
-      }
-
-      function storeUserCredentials(credentials) {
-        $window.localStorage.setItem(TOKEN_KEY, credentials);
-        useCredentials(credentials);
-      }
-
       function destroyUserCredentials() {
         authToken = undefined;
         username = "";
         isAuthenticated = false;
         $http.defaults.headers.common["x-access-token"] = authToken;
-        $window.localStorage.removeItem(TOKEN_KEY);
+        $localStorage.remove(TOKEN_KEY);
       }
 
       authFac.login = function(loginData) {
         $resource(baseURL + "users/login").save(
           loginData,
           function(response) {
-            var credentials = {
+            storeUserCredentials({
               username: loginData.username,
               token: response.token
-            };
-            storeUserCredentials(credentials);
-            useCredentials(credentials);
+            });
             $rootScope.$broadcast("login:Successful");
           },
           function(response) {
@@ -136,16 +166,16 @@ angular
 
             var message =
               '\
-                  <div class="ngdialog-message">\
-                  <div><h3>Login Unsuccessful</h3></div>' +
+                <div class="ngdialog-message">\
+                <div><h3>Login Unsuccessful</h3></div>' +
               "<div><p>" +
               response.data.err.message +
               "</p><p>" +
               response.data.err.name +
               "</p></div>" +
               '<div class="ngdialog-buttons">\
-                      <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click=confirm("OK")>OK</button>\
-                  </div>';
+                    <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click=confirm("OK")>OK</button>\
+                </div>';
 
             ngDialog.openConfirm({ template: message, plain: "true" });
           }
@@ -153,15 +183,7 @@ angular
       };
 
       authFac.logout = function() {
-        $resource(baseURL + "users/logout").save(
-          "",
-          function(response) {
-            return response;
-          },
-          function(response) {
-            return response;
-          }
-        );
+        $resource(baseURL + "users/logout").get(function(response) {});
         destroyUserCredentials();
       };
 
@@ -174,20 +196,19 @@ angular
               password: registerData.password
             });
             if (registerData.rememberMe) {
-              $window.localStorage.storeObject("userinfo", {
+              $localStorage.storeObject("userinfo", {
                 username: registerData.username,
                 password: registerData.password
               });
             }
 
             $rootScope.$broadcast("registration:Successful");
-            return response;
           },
           function(response) {
             var message =
               '\
-                  <div class="ngdialog-message">\
-                  <div><h3>Registration Unsuccessful</h3></div>' +
+                <div class="ngdialog-message">\
+                <div><h3>Registration Unsuccessful</h3></div>' +
               "<div><p>" +
               response.data.err.message +
               "</p><p>" +

@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
 var Test = require("../models/test");
+var Verify = require("./verify");
 
 var testRouter = express.Router({ mergeParams: true });
 module.exports = testRouter;
@@ -10,6 +11,7 @@ testRouter.use(bodyParser.json());
 
 testRouter
   .route("/")
+  .all(Verify.verifyOrdinaryUser)
 
   .get(function(req, res, next) {
     if (req.query.page) {
@@ -47,7 +49,7 @@ testRouter
       });
   })
 
-  .post(function(req, res, next) {
+  .post(Verify.verifyAdmin, function(req, res, next) {
     req.body.projectId = req.params.projectId;
     req.body.suiteId = req.params.suiteId;
     Test.create(req.body, function(err, test) {
@@ -63,6 +65,7 @@ testRouter
 
 testRouter
   .route("/:testId")
+  .all(Verify.verifyOrdinaryUser)
 
   .get(function(req, res, next) {
     Test.findById(req.params.testId, function(err, test) {
@@ -71,7 +74,7 @@ testRouter
     });
   })
 
-  .put(function(req, res, next) {
+  .put(Verify.verifyAdmin, function(req, res, next) {
     Test.findByIdAndUpdate(
       req.params.testId,
       { $set: req.body },
@@ -83,7 +86,7 @@ testRouter
     );
   })
 
-  .delete(function(req, res, next) {
+  .delete(Verify.verifyAdmin, function(req, res, next) {
     Test.findByIdAndRemove(req.params.testId, function(err, resp) {
       if (err) return next(err);
       res.json(resp);
