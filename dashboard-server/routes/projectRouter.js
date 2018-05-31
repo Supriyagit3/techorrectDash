@@ -28,8 +28,6 @@ projectRouter
 
     var skipAmount = perPage * (page - 1);
 
-    console.log(req.decoded);
-
     Project.find({ _id: { $in: req.decoded.projects } })
       .skip(skipAmount)
       .limit(perPage)
@@ -37,12 +35,12 @@ projectRouter
         if (err) throw err;
 
         Project.count(req.params).exec(function(err, count) {
-          res.json({
-            // TODO: calculate healthy and unhealthy suites
+              res.json({
+                // TODO: calculate healthy and unhealthy suites
             projects: projects,
-            current: page,
-            pages: Math.ceil(count / perPage)
-          });
+                current: page,
+                pages: Math.ceil(count / perPage)
+              });
         });
       });
   })
