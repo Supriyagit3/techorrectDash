@@ -31,29 +31,26 @@ projectSchema.method("getSuiteCounts", function(cb) {
   thisFailedLvl = this.healthyFailedLevel;
   thisSkippedLvl = this.healthySkippedLevel;
   thisDisabledLvl = this.healthyDisabledLevel;
-  Suite.find({ projectId: this._id })
-    .exec(function(err, suites) {
-      if (err) throw err;
+  Suite.find({ projectId: this._id }).exec(function(err, suites) {
+    if (err) throw err;
 
-      var unhealthyCounts = 0;
-      var healthyCounts = 0;
-      
-      suites.map(function(suite) {
-        if (suite.failingTests < thisFailedLvl &&
-            suite.skippedTests < thisSkippedLvl &&
-            suite.disabledTests < thisDisabledLvl)
-          healthyCounts++;
+    var unhealthyCounts = 0;
+    var healthyCounts = 0;
 
-        if (suite.failingTests > this.healthyFailedLevel)
-          unhealthyCounts++;
-        if (suite.skippedTests > this.healthySkippedLevel)
-          unhealthyCounts++;
-        if (suite.disabledTests > this.healthyDisabledLevel)
-          unhealthyCounts++;
-      });
-
-      return cb(unhealthyCounts, healthyCounts);
+    suites.map(function(suite) {
+      if (
+        suite.failingTests < thisFailedLvl &&
+        suite.skippedTests < thisSkippedLvl &&
+        suite.disabledTests < thisDisabledLvl
+      )
+        healthyCounts++;
+      else {
+        unhealthyCounts++;
+      }
     });
+
+    return cb(unhealthyCounts, healthyCounts);
+  });
 });
 
 var Project = mongoose.model("Project", projectSchema);
