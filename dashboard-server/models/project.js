@@ -28,27 +28,31 @@ var projectSchema = new Schema(
 );
 
 projectSchema.method("getSuiteCounts", function(cb) {
+  thisFailedLvl = this.healthyFailedLevel;
+  thisSkippedLvl = this.healthySkippedLevel;
+  thisDisabledLvl = this.healthyDisabledLevel;
   Suite.find({ projectId: this._id })
     .exec(function(err, suites) {
       if (err) throw err;
 
       var unhealthyCounts = 0;
-      var skippedCounts = 0;
-      var disabledCounts = 0;
       var healthyCounts = 0;
       
       suites.map(function(suite) {
+        if (suite.failingTests < thisFailedLvl &&
+            suite.skippedTests < thisSkippedLvl &&
+            suite.disabledTests < thisDisabledLvl)
+          healthyCounts++;
+
         if (suite.failingTests > this.healthyFailedLevel)
           unhealthyCounts++;
-        else if (suite.skippedTests > this.healthySkippedLevel)
-          skippedCounts++;
-        else if (suite.disabledTests > this.healthyDisabledLevel)
-          disabledCounts++;
-        else
-          healthyCounts++;
+        if (suite.skippedTests > this.healthySkippedLevel)
+          unhealthyCounts++;
+        if (suite.disabledTests > this.healthyDisabledLevel)
+          unhealthyCounts++;
       });
 
-      return cb(unhealthyCounts, skippedCounts, disabledCounts, healthyCounts);
+      return cb(unhealthyCounts, healthyCounts);
     });
 });
 
