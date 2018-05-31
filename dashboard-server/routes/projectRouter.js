@@ -28,8 +28,6 @@ projectRouter
 
     var skipAmount = perPage * (page - 1);
 
-    console.log(req.decoded);
-
     Project.find({ _id: { $in: req.decoded.projects } })
       .skip(skipAmount)
       .limit(perPage)
@@ -38,7 +36,7 @@ projectRouter
 
         Project.count(req.params).exec(function(err, count) {
           var updated = [];
-	  var promises = projects.map(function(project) {
+          var promises = projects.map(function(project) {
             return new Promise(function(resolve, reject) {
               project.getSuiteCounts(function(unhealthyCounts, healthyCounts) {
                 obj_proj = project.toObject();
@@ -51,7 +49,7 @@ projectRouter
           });
 
           Promise.all(promises)
-            .then(function() { 
+            .then(function() {
               res.json({
                 // TODO: calculate healthy and unhealthy suites
                 projects: updated,
@@ -60,7 +58,6 @@ projectRouter
               });
             })
             .catch(console.error);
-
         });
       });
   })
