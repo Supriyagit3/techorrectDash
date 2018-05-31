@@ -40,11 +40,9 @@ projectRouter
           var updated = [];
 	  var promises = projects.map(function(project) {
             return new Promise(function(resolve, reject) {
-              project.getSuiteCounts(function(unhealthyCounts, skippedCounts, disabledCounts, healthyCounts) {
+              project.getSuiteCounts(function(unhealthyCounts, healthyCounts) {
                 obj_proj = project.toObject();
                 obj_proj.unhealthySuites = unhealthyCounts;
-                obj_proj.skippedSuites = skippedCounts;
-                obj_proj.disabledSuites = disabledCounts;
                 obj_proj.healthySuites = healthyCounts;
                 updated.push(obj_proj);
                 resolve();
@@ -54,7 +52,6 @@ projectRouter
 
           Promise.all(promises)
             .then(function() { 
-              console.log("updated = " + updated.length) 
               res.json({
                 // TODO: calculate healthy and unhealthy suites
                 projects: updated,
