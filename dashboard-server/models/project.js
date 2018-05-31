@@ -37,7 +37,7 @@ projectSchema.method("getSuiteCounts", function(cb) {
     var unhealthyCounts = 0;
     var healthyCounts = 0;
 
-    suites.map(function(suite) {
+    suites.foreach(function(suite) {
       if (
         suite.failingTests < thisFailedLvl &&
         suite.skippedTests < thisSkippedLvl &&
