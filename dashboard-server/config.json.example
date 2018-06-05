@@ -1,0 +1,4 @@
+{"roleId" : "vault role id for dashboard role",
+  "secretId" : "vault secret id for dashboard role",
+  "vaultURL" : "https://vault.techorrect.com:8200",
+  "mongoHost" : "localhost:27017"}

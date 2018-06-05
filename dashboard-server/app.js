@@ -20,24 +20,12 @@ var testRouter = require("./routes/testRouter");
 var testRunRouter = require("./routes/testRunRouter");
 
 var authenticate = require("./authenticate");
-var vault = require("./vault");
+var config = require("./config");
 
 var app = express();
 
-//TODO: hide these secrets and config in a separate file or environment variables
-var roleId = "blah blah blah blah";
-var secretId = "blah blah blah blah";
-var vaultURL = 'https://vault.techorrect.com:8200';
-var mongoHost = 'localhost:27017';
-
-vault.connect(vaultURL, roleId, secretId)
-  .then(function(token) { 
-    var usernameP = vault.read('dashboard/mongodb-username');
-    var passwordP = vault.read('dashboard/mongodb-password');
-    return Promise.all([usernameP, passwordP]);
-  }).then(function([username, password]) { 
-    var url =
-      `mongodb://${username}:${password}@${mongoHost}/dashboard?authSource=admin`;
+config.mongoUrl
+  .then(function(url) {
     mongoose.connect(url);
     var db = mongoose.connection;
     db.on("error", console.error.bind(console, "connection error:"));
@@ -45,11 +33,9 @@ vault.connect(vaultURL, roleId, secretId)
       // we're connected!
       console.log("Connected correctly to mongodb");
     });
-    // console.log('username result: ' + username);
-    // console.log('password result: ' + password);
-  })
-  .catch(function(err) { console.error('Error: ' + err.message); });
-
+    console.log('url result: ' + url);
+  }) 
+  .catch(function(err) { console.error('app.js config.mongoUrl error: ' + err.message); });
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
