@@ -3,9 +3,13 @@ var jwt = require("jsonwebtoken"); // used to create, sign, and verify tokens
 var config = require("../config.js");
 
 exports.getToken = function(user) {
-  return jwt.sign(user, config.secretKey, {
-    expiresIn: 3600
-  });
+  return config.secretKey
+    .then(function(key) {
+      return Promise.resolve(jwt.sign(user, key, {
+        expiresIn: 3600
+      }));
+    })
+    .catch(function(err) { console.error('verify.js getToken config.secretKey Error: ' + err.message); });
 };
 
 exports.verifyOrdinaryUser = function(req, res, next) {
@@ -15,18 +19,22 @@ exports.verifyOrdinaryUser = function(req, res, next) {
 
   // decode token
   if (token) {
-    // verifies secret and checks exp
-    jwt.verify(token, config.secretKey, function(err, decoded) {
-      if (err) {
-        var err1 = new Error("You are not authenticated!");
-        err1.status = 401;
-        return next(err1);
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;
-        next();
-      }
-    });
+    config.secretKey
+      .then(function(key) {
+        // verifies secret and checks exp
+        jwt.verify(token, key, function(err, decoded) {
+          if (err) {
+            var err1 = new Error("You are not authenticated!");
+            err1.status = 401;
+            return next(err1);
+          } else {
+            // if everything is good, save to request for use in other routes
+            req.decoded = decoded;
+            next();
+          }
+        });
+      })
+    .catch(function(err) { console.error('verify.js verifyOrdinaryUser config.secretKey Error: ' + err.message); });
   } else {
     // if there is no token
     // return an error
