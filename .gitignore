@@ -59,3 +59,15 @@ typings/
 
 # dotenv environment variables file
 .env
+
+#  Local .terraform directories
+.terraform/
+
+# .tfstate files
+**/terraform/*.tfstate
+**/terraform/*.tfstate.*
+
+# Ansible files
+**/ansible/hosts
+**/ansible/*.retry
+

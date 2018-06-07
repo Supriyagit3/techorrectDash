@@ -1,0 +1,20 @@
+---
+# This Playbook runs all the common plays in the deployment
+
+- name: Create the repository for mongo
+  copy: src=10gen.repo.j2 dest=/etc/yum.repos.d/10gen.repo
+
+- name: Create the mongod user
+  user: name=mongod comment="MongoD"
+
+- name: Create the data directory for the namenode metadata
+  file: path={{ mongodb_datadir_prefix }} owner=mongod group=mongod state=directory
+
+- name: Install the mongodb package
+  yum: name={{ item }} state=installed
+  with_items:
+   - mongodb-org
+
+- name: Create the iptables file
+  template: src=iptables.j2 dest=/etc/sysconfig/iptables
+  notify: restart iptables
