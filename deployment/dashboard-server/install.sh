@@ -16,20 +16,10 @@ nvm install 9.11.1
 
 tar -xzf dash.tar.gz
 
+sudo mv dashboard_backend.service /etc/systemd/system/dashboard_backend.service
 mv config.json dashboard/dashboard-server
 cd dashboard/dashboard-server
 npm install
 npm start   # needs config.json configured properly
-
-# sudo apt install unzip
-# 
-# cd /var/lib/vault
-# # download and install Vault https://www.vaultproject.io/docs/install/index.html#precompiled-binaries
-# curl -v -L https://releases.hashicorp.com/vault/0.9.6/vault_0.9.6_linux_amd64.zip -o vault.zip
-# unzip vault.zip
-# rm vault.zip
-# chmod +x vault
-# sudo mv vault /usr/local/bin/vault
-# 
-# sudo systemctl enable vault.service
-# sudo systemctl start vault.service
+sudo systemctl enable dashboard_backend.service
+sudo systemctl start dashboard_backend.service

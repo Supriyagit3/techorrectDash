@@ -56,6 +56,17 @@ resource "aws_instance" "dashboard" {
     }
   }
   
+  provisioner "file" {
+    source = "./dashboard_backend.service"
+    destination = "/home/ubuntu/dashboard_backend.service"
+  
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
+    }
+  }
+  
   provisioner "remote-exec" {
     inline = [ "chmod +x /home/ubuntu/install.sh",
       		"/home/ubuntu/install.sh" ]
