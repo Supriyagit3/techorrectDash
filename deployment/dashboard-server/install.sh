@@ -16,10 +16,11 @@ nvm install 9.11.1
 
 tar -xzf dash.tar.gz
 
-sudo mv dashboard_backend.service /etc/systemd/system/dashboard_backend.service
-mv config.json dashboard/dashboard-server
+sudo mv techorrect_dashboard_backend.service /etc/systemd/system/techorrect_dashboard_backend.service
+chmod +x start_backend.sh
+mv start_backend.sh dashboard/dashboard-server/
+mv config.json dashboard/dashboard-server/
 cd dashboard/dashboard-server
 npm install
-npm start   # needs config.json configured properly
-sudo systemctl enable dashboard_backend.service
-sudo systemctl start dashboard_backend.service
+sudo systemctl enable techorrect_dashboard_backend.service
+sudo systemctl start techorrect_dashboard_backend.service

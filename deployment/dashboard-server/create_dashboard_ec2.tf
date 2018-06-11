@@ -57,8 +57,19 @@ resource "aws_instance" "dashboard" {
   }
   
   provisioner "file" {
-    source = "./dashboard_backend.service"
-    destination = "/home/ubuntu/dashboard_backend.service"
+    source = "./techorrect_dashboard_backend.service"
+    destination = "/home/ubuntu/techorrect_dashboard_backend.service"
+  
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
+    }
+  }
+  
+  provisioner "file" {
+    source = "./start_backend.sh"
+    destination = "/home/ubuntu/start_backend.sh"
   
     connection {
       type = "ssh"
