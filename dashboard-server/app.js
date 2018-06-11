@@ -20,18 +20,22 @@ var testRouter = require("./routes/testRouter");
 var testRunRouter = require("./routes/testRunRouter");
 
 var authenticate = require("./authenticate");
+var config = require("./config");
 
 var app = express();
 
-var url =
-  "mongodb://dashboardAdmin:dashPWD@localhost:27017/dashboard?authSource=admin";
-mongoose.connect(url);
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function() {
-  // we're connected!
-  console.log("Connected correctly to server");
-});
+config.mongoUrl
+  .then(function(url) {
+    mongoose.connect(url);
+    var db = mongoose.connection;
+    db.on("error", console.error.bind(console, "connection error:"));
+    db.once("open", function() {
+      // we're connected!
+      console.log("Connected correctly to mongodb");
+    });
+    console.log('url result: ' + url);
+  }) 
+  .catch(function(err) { console.error('app.js config.mongoUrl error: ' + err.message); });
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

@@ -87,17 +87,20 @@ router.post("/login", function(req, res, next) {
         });
       }
 
-      var token = Verify.getToken({
+      Verify.getToken({
         username: user.username,
         _id: user._id,
         admin: user.admin,
         projects: user.projects
-      });
-      res.status(200).json({
-        status: "Login successful!",
-        success: true,
-        token: token
-      });
+      })
+      .then(function(token) {
+        res.status(200).json({
+          status: "Login successful!",
+          success: true,
+          token: token
+        });
+      })
+      .catch(function(err) { console.error('users.js verify.getToken Error: ' + err.message); });
     });
   })(req, res, next);
 });
