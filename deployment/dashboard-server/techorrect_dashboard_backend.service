@@ -1,0 +1,14 @@
+[Unit]
+Description=Techorrect Dashboard ExpressJS Backend
+After=network.target
+
+[Service]
+Environment=NODE_PORT=3001
+Type=simple
+User=ubuntu
+ExecStart=/home/ubuntu/dashboard/dashboard-server/start_backend.sh
+WorkingDirectory=/home/ubuntu/dashboard/dashboard-server/
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
