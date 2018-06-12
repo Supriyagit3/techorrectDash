@@ -1,10 +1,11 @@
 ---
-- hosts: all
-  become: yes
+
+- hosts: local
   roles:
-  - role: common
+  - role: prep
 
 - hosts: mongo_servers
   become: yes
   roles:
+  - role: common
   - role: mongod

@@ -23,5 +23,6 @@
   command: creates=/var/lock/subsys/mongod-{{ inventory_hostname }} /etc/init.d/mongod-{{ inventory_hostname }} start
 
 - name: add the admin user
-  mongodb_user: database=admin name=admin password={{ mongo_admin_pass }} login_port={{ mongoc_port }} state=present
+  mongodb_user: database=admin name=admin password={{ mongo_admin_pass }} state=present
   ignore_errors: yes
+  tags: admin_user

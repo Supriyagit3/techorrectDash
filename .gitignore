@@ -70,4 +70,4 @@ typings/
 # Ansible files
 **/ansible/hosts
 **/ansible/*.retry
-
+**/ansible/**/secret

@@ -12,3 +12,7 @@ resource "aws_instance" "mongodb" {
     Name = "${var.ENVIRONMENT}-mongodb"
   }
 }
+
+output "instance-dns" {
+  value = "${aws_instance.mongodb.public_dns}"
+}
