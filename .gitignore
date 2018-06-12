@@ -59,3 +59,9 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# Ed's scripts
+add-project.sh
+login.sh
+projects.sh
+register.sh
