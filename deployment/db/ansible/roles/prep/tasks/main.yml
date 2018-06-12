@@ -1,0 +1,4 @@
+
+- name: Prepare authorization key file
+  local_action: shell openssl rand -base64 756 > {{ playbook_dir }}/roles/mongod/files/secret
+  tags: local
