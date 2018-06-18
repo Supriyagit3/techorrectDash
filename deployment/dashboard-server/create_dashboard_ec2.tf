@@ -56,6 +56,28 @@ resource "aws_instance" "dashboard" {
     }
   }
   
+  provisioner "file" {
+    source = "./techorrect_dashboard_backend.service"
+    destination = "/home/ubuntu/techorrect_dashboard_backend.service"
+  
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
+    }
+  }
+  
+  provisioner "file" {
+    source = "./start_backend.sh"
+    destination = "/home/ubuntu/start_backend.sh"
+  
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
+    }
+  }
+  
   provisioner "remote-exec" {
     inline = [ "chmod +x /home/ubuntu/install.sh",
       		"/home/ubuntu/install.sh" ]
@@ -70,7 +92,8 @@ resource "aws_instance" "dashboard" {
 
 resource "aws_lb" "web-lb" {
   name = "dashboard-lb"
-  load_balancer_type = "network"
+  load_balancer_type = "application"
+  security_groups    = ["sg-414cef2b"]
 
   subnets = ["subnet-d6228abe","subnet-f15ab98b","subnet-7d3b1e30"]
 }
@@ -78,7 +101,10 @@ resource "aws_lb" "web-lb" {
 resource "aws_lb_listener" "web-lb-listener" {
   load_balancer_arn = "${aws_lb.web-lb.arn}"
   port = "443"
-  protocol = "TCP"
+  protocol = "HTTPS"
+  ssl_policy = "ELBSecurityPolicy-2016-08"
+  certificate_arn = "arn:aws:acm:us-east-2:943161218049:certificate/7d0b4d31-708a-4651-bdc5-7ba803085714"
+
 
   default_action {
     target_group_arn = "${aws_lb_target_group.web-lb-target-group.arn}"
@@ -88,8 +114,8 @@ resource "aws_lb_listener" "web-lb-listener" {
 
 resource "aws_lb_target_group" "web-lb-target-group" {
   name     = "dashboard-lb-target-group"
-  port     = 443
-  protocol = "TCP"
+  port     = 80
+  protocol = "HTTP"
   vpc_id   = "${var.vpc_id}"
 }
 
