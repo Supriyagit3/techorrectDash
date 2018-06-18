@@ -26,17 +26,23 @@ npm install
 sudo systemctl enable techorrect_dashboard_backend.service
 sudo systemctl start techorrect_dashboard_backend.service
 
-# Install angular (nginx)
 # https://www.nginx.com/blog/setting-up-nginx/
-cd /home/ubuntu/dashboard/gui
-npm install -g bower
-npm install -g @angular/cli@1.7.4
-ng build
-
+echo "deb http://nginx.org/packages/ubuntu xenial nginx" | sudo tee --append /etc/apt/sources.list
+echo "deb-src http://nginx.org/packages/ubuntu xenial nginx" | sudo tee --append /etc/apt/sources.list
 cd /home/ubuntu
 sudo wget http://nginx.org/keys/nginx_signing.key
 sudo apt-key add nginx_signing.key
+sudo apt-get update
+sudo apt-get install nginx
+sudo rm -rf /usr/share/nginx/html/*
 
-echo "deb http://nginx.org/packages/ubuntu xenial nginx" | sudo tee --append /etc/apt/sources.list
-echo "deb-src http://nginx.org/packages/ubuntu xenial nginx" | sudo tee --append /etc/apt/sources.list
+# Install angular 
+cd /home/ubuntu/dashboard/gui
+npm install
+npm install -g bower
+npm install --global gulp-cli
+bower install
+gulp usemin # builds the dist/ output folder.  this will return a gulp-notify error, which can be ignored
+sudo mv dist/* /usr/share/nginx/html
+
 sudo systemctl start nginx.service
