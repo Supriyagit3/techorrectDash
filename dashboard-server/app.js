@@ -26,7 +26,11 @@ var app = express();
 
 config.mongoUrl
   .then(function(url) {
-    mongoose.connect(url);
+    mongoose.connect(url).
+      catch(function(err) { if(err) {
+        console.log("Couldn't connect to mongodb: " + err.message);
+        process.exit(110);
+      }});
     var db = mongoose.connection;
     db.on("error", console.error.bind(console, "connection error:"));
     db.once("open", function() {
@@ -35,7 +39,10 @@ config.mongoUrl
     });
     console.log('url result: ' + url);
   }) 
-  .catch(function(err) { console.error('app.js config.mongoUrl error: ' + err.message); });
+  .catch(function(err) { if(err) {
+    console.error('app.js config.mongoUrl error: ' + err.message);
+    process.exit(111);
+  }});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

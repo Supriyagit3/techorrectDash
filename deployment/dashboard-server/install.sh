@@ -16,20 +16,33 @@ nvm install 9.11.1
 
 tar -xzf dash.tar.gz
 
-mv config.json dashboard/dashboard-server
+# Install expressjs backend (port 3000)
+sudo mv techorrect_dashboard_backend.service /etc/systemd/system/techorrect_dashboard_backend.service
+chmod +x start_backend.sh
+mv start_backend.sh dashboard/dashboard-server/
+mv config.json dashboard/dashboard-server/
 cd dashboard/dashboard-server
 npm install
-npm start   # needs config.json configured properly
+sudo systemctl enable techorrect_dashboard_backend.service
+sudo systemctl start techorrect_dashboard_backend.service
 
-# sudo apt install unzip
-# 
-# cd /var/lib/vault
-# # download and install Vault https://www.vaultproject.io/docs/install/index.html#precompiled-binaries
-# curl -v -L https://releases.hashicorp.com/vault/0.9.6/vault_0.9.6_linux_amd64.zip -o vault.zip
-# unzip vault.zip
-# rm vault.zip
-# chmod +x vault
-# sudo mv vault /usr/local/bin/vault
-# 
-# sudo systemctl enable vault.service
-# sudo systemctl start vault.service
+# https://www.nginx.com/blog/setting-up-nginx/
+echo "deb http://nginx.org/packages/ubuntu xenial nginx" | sudo tee --append /etc/apt/sources.list
+echo "deb-src http://nginx.org/packages/ubuntu xenial nginx" | sudo tee --append /etc/apt/sources.list
+cd /home/ubuntu
+sudo wget http://nginx.org/keys/nginx_signing.key
+sudo apt-key add nginx_signing.key
+sudo apt-get update
+sudo apt-get install nginx
+sudo rm -rf /usr/share/nginx/html/*
+
+# Install angular 
+cd /home/ubuntu/dashboard/gui
+npm install
+npm install -g bower
+npm install --global gulp-cli
+bower install
+gulp usemin # builds the dist/ output folder.  this will return a gulp-notify error, which can be ignored
+sudo mv dist/* /usr/share/nginx/html
+
+sudo systemctl start nginx.service
