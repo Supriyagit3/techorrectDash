@@ -39,7 +39,6 @@ resource "aws_lb_listener" "web-lb-listener" {
   ssl_policy = "ELBSecurityPolicy-2016-08"
   certificate_arn = "arn:aws:acm:us-east-2:943161218049:certificate/7d0b4d31-708a-4651-bdc5-7ba803085714"
 
-
   default_action {
     target_group_arn = "${aws_lb_target_group.web-lb-target-group.arn}"
     type             = "forward"
@@ -57,6 +56,32 @@ resource "aws_lb_target_group_attachment" "web-lb-target-group-attachment" {
   target_group_arn = "${aws_lb_target_group.web-lb-target-group.arn}"
   target_id        = "${aws_instance.dashboard.id}"
   port             = 80
+}
+
+resource "aws_lb_listener" "web-backend-lb-listener" {
+  load_balancer_arn = "${aws_lb.web-lb.arn}"
+  port = "3000"
+  protocol = "HTTPS"
+  ssl_policy = "ELBSecurityPolicy-2016-08"
+  certificate_arn = "arn:aws:acm:us-east-2:943161218049:certificate/7d0b4d31-708a-4651-bdc5-7ba803085714"
+
+  default_action {
+    target_group_arn = "${aws_lb_target_group.web-backend-lb-target-group.arn}"
+    type             = "forward"
+  }
+}
+
+resource "aws_lb_target_group" "web-backend-lb-target-group" {
+  name     = "backend-lb-target-group"
+  port     = 3000
+  protocol = "HTTP"
+  vpc_id   = "${var.vpc_id}"
+}
+
+resource "aws_lb_target_group_attachment" "web-backend-lb-target-group-attachment" {
+  target_group_arn = "${aws_lb_target_group.web-backend-lb-target-group.arn}"
+  target_id        = "${aws_instance.dashboard.id}"
+  port             = 3000
 }
 
 data "aws_route53_zone" "selected" {
