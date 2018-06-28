@@ -5,9 +5,9 @@ After=network.target
 [Service]
 Environment=NODE_PORT=3001
 Type=simple
-User=ubuntu
-ExecStart=/home/ubuntu/dashboard/dashboard-server/start_backend.sh
-WorkingDirectory=/home/ubuntu/dashboard/dashboard-server/
+User=ec2-user
+ExecStart=/home/ec2-user/dashboard/dashboard-server/start_backend.sh
+WorkingDirectory=/home/ec2-user/dashboard/dashboard-server/
 Restart=on-failure
 
 [Install]

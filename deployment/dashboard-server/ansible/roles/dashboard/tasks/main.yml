@@ -1,0 +1,105 @@
+- name: Download nodejs binary package
+  get_url: url=https://nodejs.org/dist/v8.11.3/node-v8.11.3-linux-x64.tar.xz
+           dest=/tmp/node-v8.11.3-linux-x64.tar.xz
+- name: Create install directory
+  file: path=/usr/local/lib/nodejs
+        state=directory
+        mode=0755
+- name: Unarchive nodejs into install directory
+  unarchive:
+    src: /tmp/node-v8.11.3-linux-x64.tar.xz
+    dest: /usr/local/lib/nodejs
+    remote_src: yes
+    extra_opts: ["--strip-components=1"]
+- name: Link node binary
+  file: 
+    src: /usr/local/lib/nodejs/bin/node
+    dest: /usr/local/bin/node
+    state: link
+- name: Link npm binary
+  file: 
+    src: /usr/local/lib/nodejs/bin/npm 
+    dest: /usr/local/bin/npm
+    state: link
+- name: Upload Techorrect dashboard archive
+  unarchive:
+    src: dash.tar.gz
+    dest: /home/ec2-user
+- name: Copy ExpressJS bash start script
+  copy:
+    src: start_backend.sh
+    dest: /home/ec2-user/dashboard/dashboard-server/start_backend.sh
+    mode: 0755
+- name: Copy systemd file
+  copy:
+    src: techorrect_dashboard_backend.service
+    dest: /etc/systemd/system/techorrect_dashboard_backend.service
+- name: Upload credentials in config.json template
+  template:
+    src: config.json.j2
+    dest: /home/ec2-user/dashboard/dashboard-server/config.json
+- name: Install Techorrect backend server packages based on package.json
+  npm:
+    path: /home/ec2-user/dashboard/dashboard-server
+    # executable: /usr/local/bin/npm #https://github.com/ansible/ansible/issues/29240 
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+- name: enable Techorrect backend service and ensure it is not masked
+  systemd:
+    name: techorrect_dashboard_backend
+    enabled: yes
+    masked: no
+- name: Start Techorrect backend service
+  systemd: state=started name=techorrect_dashboard_backend
+# Most of the following steps can be omitted after the build process has been moved to a pipeline in Concourse
+- name: Install Techorrect GUI packages based on package.json
+  npm:
+    path: /home/ec2-user/dashboard/gui
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+- name: Install bower globally
+  npm:
+    name: bower
+    global: yes
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+- name: Install gulp globally
+  npm:
+    name: gulp-cli
+    global: yes
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+- name: Link bower binary
+  file: 
+    src: /usr/local/lib/nodejs/lib/node_modules/bower/bin/bower
+    dest: /usr/local/bin/bower
+    state: link
+- name: Link gulp binary
+  file: 
+    src: /usr/local/lib/nodejs/lib/node_modules/gulp-cli/bin/gulp.js
+    dest: /usr/local/bin/gulp
+    state: link
+- name: Install bower packages based on bower.json
+  bower:
+    path: /home/ec2-user/dashboard/gui
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+- name: Build minified files using gulp
+  command: gulp usemin
+  args:
+    chdir: /home/ec2-user/dashboard/gui
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+- name: Clear default nginx files
+  shell: rm -rf /usr/share/nginx/html/*
+  become: yes
+- name: Move minified files to nginx dir
+  shell: mv /home/ec2-user/dashboard/gui/dist/* /usr/share/nginx/html
+  become: yes
+- name: enable nginx service
+  systemd:
+    name: nginx
+    enabled: yes
+    masked: no
+- name: Start nginx
+  systemd: state=started name=nginx

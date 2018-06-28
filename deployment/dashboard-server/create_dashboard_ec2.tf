@@ -14,79 +14,13 @@ data "template_file" "dashboard_config" {
 }
 
 resource "aws_instance" "dashboard" {
-  ami           = "ami-965e6bf3" # ubuntu 16.04
+  ami           = "ami-8c122be9" # Amazon Linux 2 AMI (HVM), SSD Volume Type
   instance_type = "t2.micro"
   vpc_security_group_ids = ["sg-5b9d2730", "sg-414cef2b", "sg-aa41e2c0"] # techorrect ssh dev, dashboard (http/s), mongodb
   key_name = "techorrectAdmin"
 
   tags {
     Name = "Dashboard"
-  }
-
-  provisioner "file" {
-    source = "./install.sh"
-    destination = "/home/ubuntu/install.sh"
-  
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
-    }
-  }
-  
-  provisioner "file" {
-    content = "${data.template_file.dashboard_config.rendered}"
-    destination = "/home/ubuntu/config.json"
-  
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
-    }
-  }
-  
-  provisioner "file" {
-    source = "./dash.tar.gz"
-    destination = "/home/ubuntu/dash.tar.gz"
-  
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
-    }
-  }
-  
-  provisioner "file" {
-    source = "./techorrect_dashboard_backend.service"
-    destination = "/home/ubuntu/techorrect_dashboard_backend.service"
-  
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
-    }
-  }
-  
-  provisioner "file" {
-    source = "./start_backend.sh"
-    destination = "/home/ubuntu/start_backend.sh"
-  
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
-    }
-  }
-  
-  provisioner "remote-exec" {
-    inline = [ "chmod +x /home/ubuntu/install.sh",
-      		"/home/ubuntu/install.sh" ]
-  
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      private_key = "${file("${var.path_to_aws_pem_file_for_ec2_ssh}")}"
-    }
   }
 }
 

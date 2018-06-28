@@ -2,7 +2,7 @@
 
 angular
   .module("techorrectDash")
-  .constant("baseURL", "http://192.168.2.60:3000/")
+  .constant("baseURL", "http://192.168.2.55:3000/")
 
   .factory("ProjectFactory", [
     "$resource",
