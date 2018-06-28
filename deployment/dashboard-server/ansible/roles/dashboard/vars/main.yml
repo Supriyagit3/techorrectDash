@@ -1,4 +1,0 @@
-vaultRoleId: "9819fbb8-c72f-de00-bdde-92fcae29876d"
-vaultSecretId: "e9807eb3-4de9-c703-0325-d020213c0db0"
-vaultURL: "https://vault.techorrect.com:8200"
-mongoHost: "localhost:27017"
