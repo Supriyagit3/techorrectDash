@@ -77,3 +77,5 @@ register.sh
 **/ansible/hosts
 **/ansible/*.retry
 **/ansible/**/secret
+
+**/ansible/**/dashboardtoken

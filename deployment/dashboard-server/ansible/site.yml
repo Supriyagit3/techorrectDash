@@ -1,5 +1,10 @@
 - hosts: webservers
   remote_user: ec2-user
+  vars_prompt:
+    - name: "vaultRoleId"
+      prompt: "Vault Role ID for Ansible"
+    - name: "vaultSecretID"
+      prompt: "Vault Secret for Ansible"
   roles:
   - role: nginx
   - role: dashboard
