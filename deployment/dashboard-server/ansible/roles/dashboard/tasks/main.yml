@@ -51,41 +51,41 @@
     masked: no
 - name: Start Techorrect backend service
   systemd: state=started name=techorrect_dashboard_backend
+  become: yes
 # Most of the following steps can be omitted after the build process has been moved to a pipeline in Concourse
 - name: Install Techorrect GUI packages based on package.json
   npm:
     path: /home/ec2-user/dashboard/gui
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-- name: Install bower globally
+# git is a requirement for bower install later on
+- name: Install git
+  yum:
+    name: git
+    state: latest
+  become: yes
+- name: Install bower
   npm:
+    path: /home/ec2-user/dashboard/gui
     name: bower
-    global: yes
+    global: no
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-- name: Install gulp globally
+- name: Install gulp
   npm:
+    path: /home/ec2-user/dashboard/gui
     name: gulp-cli
-    global: yes
+    global: no
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-- name: Link bower binary
-  file: 
-    src: /usr/local/lib/nodejs/lib/node_modules/bower/bin/bower
-    dest: /usr/local/bin/bower
-    state: link
-- name: Link gulp binary
-  file: 
-    src: /usr/local/lib/nodejs/lib/node_modules/gulp-cli/bin/gulp.js
-    dest: /usr/local/bin/gulp
-    state: link
 - name: Install bower packages based on bower.json
   bower:
     path: /home/ec2-user/dashboard/gui
+    relative_execpath: node_modules/.bin
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
 - name: Build minified files using gulp
-  command: gulp usemin
+  command: node_modules/.bin/gulp usemin
   args:
     chdir: /home/ec2-user/dashboard/gui
   environment:
@@ -96,10 +96,6 @@
 - name: Move minified files to nginx dir
   shell: mv /home/ec2-user/dashboard/gui/dist/* /usr/share/nginx/html
   become: yes
-- name: enable nginx service
-  systemd:
-    name: nginx
-    enabled: yes
-    masked: no
 - name: Start nginx
   systemd: state=started name=nginx
+  become: yes

@@ -1,3 +1,9 @@
 - name: Install nginx on Amazon Linux 2
   command: amazon-linux-extras install -y nginx1.12
   become: yes
+- name: enable nginx service
+  systemd:
+    name: nginx
+    enabled: yes
+    masked: no
+  become: yes
