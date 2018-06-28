@@ -2,27 +2,60 @@
 # This role deploys the mongod processes and sets up the replication set.
 
 - name: create data directory for mongodb
+  become: yes
   file: path={{ mongodb_datadir_prefix }}mongo-{{ inventory_hostname }} state=directory owner=mongod group=mongod
 
 - name: create log directory for mongodb
+  become: yes
   file: path=/var/log/mongo state=directory owner=mongod group=mongod
 
 - name: create run directory for mongodb
+  become: yes
   file: path=/var/run/mongo state=directory owner=mongod group=mongod
 
 - name: Create the mongodb startup file
+  become: yes
   template: src=mongod.j2 dest=/etc/init.d/mongod-{{ inventory_hostname }} mode=0655
 
 - name: Create the mongodb configuration file
+  become: yes
   template: src=mongod.conf.j2 dest=/etc/mongod-{{ inventory_hostname }}.conf
 
 - name: Copy the keyfile for authentication
+  become: yes
   copy: src=secret dest={{ mongodb_datadir_prefix }}secret owner=mongod group=mongod mode=0400
 
 - name: Start the mongodb service
+  become: yes
   command: creates=/var/lock/subsys/mongod-{{ inventory_hostname }} /etc/init.d/mongod-{{ inventory_hostname }} start
 
-- name: add the admin user
-  mongodb_user: database=admin name=admin password={{ mongo_admin_pass }} state=present
-  ignore_errors: yes
+- name: Add the admin user
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/mongotoken') }}"
+    mongo_admin_username: "{{ lookup('hashi_vault', 'secret=mongodb/admin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    mongo_admin_pass: "{{ lookup('hashi_vault', 'secret=mongodb/admin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
+  mongodb_user:
+    database: admin
+    name: "{{ mongo_admin_username }}"
+    password: "{{ mongo_admin_pass }}"
+    state: present
+    roles: userAdminAnyDatabase
   tags: admin_user
+
+- name: Add the dashboard user
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/mongotoken') }}"
+    mongo_admin_username: "{{ lookup('hashi_vault', 'secret=mongodb/admin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    mongo_admin_pass: "{{ lookup('hashi_vault', 'secret=mongodb/admin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    mongo_dashboard_username: "{{ lookup('hashi_vault', 'secret=dashboard/mongodb-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    mongo_dashboard_pass: "{{ lookup('hashi_vault', 'secret=dashboard/mongodb-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
+  mongodb_user:
+    login_database: admin
+    login_user: "{{ mongo_admin_username }}"
+    login_password: "{{ mongo_admin_pass }}"
+    name: "{{ mongo_dashboard_username }}"
+    password: "{{ mongo_dashboard_pass }}"
+    database: admin
+    roles: { db: dashboard, role: dbOwner }'
+    state: present
+  tags: dashboard_user

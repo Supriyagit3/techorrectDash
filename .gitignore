@@ -71,3 +71,4 @@ typings/
 **/ansible/hosts
 **/ansible/*.retry
 **/ansible/**/secret
+**/ansible/**/mongotoken
