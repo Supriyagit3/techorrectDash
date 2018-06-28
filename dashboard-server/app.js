@@ -37,7 +37,6 @@ config.mongoUrl
       // we're connected!
       console.log("Connected correctly to mongodb");
     });
-    console.log('url result: ' + url);
   }) 
   .catch(function(err) { if(err) {
     console.error('app.js config.mongoUrl error: ' + err.message);
