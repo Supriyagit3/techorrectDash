@@ -86,7 +86,7 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
 - name: Build minified files using gulp
-  command: node_modules/.bin/gulp usemin
+  command: node_modules/.bin/gulp
   args:
     chdir: /home/ec2-user/dashboard/gui
   environment:
@@ -115,10 +115,10 @@
     url: https://dashboard.techorrect.com:3000/users/register
     method: POST
     body: |
-      '{	"username": "{{ redmine_admin_username }}",
+      {	"username": "{{ redmine_admin_username }}",
         "password": "{{ redmine_admin_pass }}",
         "admin": "true"
-      }'
+      }
     body_format: json
 
 - name: Login redmineAdmin user
@@ -130,9 +130,9 @@
     url: https://dashboard.techorrect.com:3000/users/login
     method: POST
     body: |
-      '{	"username": "{{ redmine_admin_username }}",
+      {	"username": "{{ redmine_admin_username }}",
         "password": "{{ redmine_admin_pass }}"
-      }'
+      }
     body_format: json
   register: dashboardLogin
 
@@ -140,15 +140,17 @@
   uri:
     url: https://dashboard.techorrect.com:3000/projects
     method: POST
-    HEADER_x-access-token: {{ dashboardLogin.json.token }}
+    headers:
+      x-access-token: "{{ dashboardLogin.json.token }}"
     body: |
-      '{
+      {
         "name": "Redmine",
         "healthyFailedLevel": 5,
         "healthyDisabledLevel": 10,
         "healthySkippedLevel": 5
-        }'
+        }
     body_format: json
+    return_content: yes
   register: projectCreated
 
 - name: Store Redmine project ID in vault
@@ -157,19 +159,25 @@
   uri:
     url: https://vault.techorrect.com:8200/v1/concourse/main/redmineProjectId
     method: POST
+    headers:
+      X-Vault-Token: "{{ vault_token }}"
     body: |
-      '{"value": "{{ projectCreated.body | regex_replace('Added the project with id: ', '') }}" }'
+      {"value": "{{ projectCreated.content | regex_replace('Added the project with id: ', '')}}" }
     body_format: json
+    status_code: 204
 
 - name: Make user assigned to redmine project
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/dashboardtoken') }}"
+    redmine_admin_username: "{{ lookup('hashi_vault', 'secret=concourse/main/redmineAdmin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
   uri:
     url: "https://dashboard.techorrect.com:3000/users/{{ redmine_admin_username }}"
-    method: POST
+    method: PUT
+    headers:
+      x-access-token: "{{ dashboardLogin.json.token }}"
     body: |
-      '{	"username": "{{ redmine_admin_username }}",
-        "password": "{{ redmine_admin_pass }}",
-        "admin": "true"
-        "projects": "[{{ projectCreated.body | regex_replace('Added the project with id: ', '') }}]"
-      }'
+      {	"username": "{{ redmine_admin_username }}",
+        "admin": "true",
+        "projects": ["{{ projectCreated.content | regex_replace('Added the project with id: ', '') }}"]
+      }
     body_format: json
-
