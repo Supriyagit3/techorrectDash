@@ -112,7 +112,17 @@
     body_format: json
 
 
-
+- name: Make user assigned to redmine project
+  uri:
+    url: "https://dashboard.techorrect.com:3000/users/{{ redmine_admin_username }}"
+    method: POST
+    body: |
+      '{	"username": "{{ redmine_admin_username }}",
+        "password": "{{ redmine_admin_pass }}",
+        "admin": "true"
+        "projects": "[{{ projectCreated.body | regex_replace('Added the project with id: ', '') }}]"
+      }'
+    body_format: json
 
 
 # Most of the following steps can be omitted after the build process has been moved to a pipeline in Concourse
