@@ -12,13 +12,13 @@
     remote_src: yes
     extra_opts: ["--strip-components=1"]
 - name: Link node binary
-  file: 
+  file:
     src: /usr/local/lib/nodejs/bin/node
     dest: /usr/local/bin/node
     state: link
 - name: Link npm binary
-  file: 
-    src: /usr/local/lib/nodejs/bin/npm 
+  file:
+    src: /usr/local/lib/nodejs/bin/npm
     dest: /usr/local/bin/npm
     state: link
 - name: Upload Techorrect dashboard archive
@@ -41,7 +41,7 @@
 - name: Install Techorrect backend server packages based on package.json
   npm:
     path: /home/ec2-user/dashboard/dashboard-server
-    # executable: /usr/local/bin/npm #https://github.com/ansible/ansible/issues/29240 
+    # executable: /usr/local/bin/npm #https://github.com/ansible/ansible/issues/29240
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
 - name: enable Techorrect backend service and ensure it is not masked
@@ -51,6 +51,70 @@
     masked: no
 - name: Start Techorrect backend service
   systemd: state=started name=techorrect_dashboard_backend
+
+- name: Login to vault
+  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretID }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/dashboardtoken
+  run_once: True
+
+- name: Add redmineAdmin user
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/dashboardtoken') }}"
+    redmine_admin_username: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    redmine_admin_pass: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
+  uri:
+    url: https://dashboard.techorrect.com:3000/users/register
+    method: POST
+    body: |
+      '{	"username": "{{ redmine_admin_username }}",
+        "password": "{{ redmine_admin_pass }}",
+        "admin": "true"
+      }'
+    body_format: json
+
+- name: Login redmineAdmin user
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/dashboardtoken') }}"
+    redmine_admin_username: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    redmine_admin_pass: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
+  uri:
+    url: https://dashboard.techorrect.com:3000/users/login
+    method: POST
+    body: |
+      '{	"username": "{{ redmine_admin_username }}",
+        "password": "{{ redmine_admin_pass }}"
+      }'
+    body_format: json
+  register: dashboardLogin
+
+- name: Create Redmine project in dashboard
+  uri:
+    url: https://dashboard.techorrect.com:3000/projects
+    method: POST
+    HEADER_x-access-token: {{ dashboardLogin.json.token }}
+    body: |
+      '{
+        "name": "Redmine",
+        "healthyFailedLevel": 5,
+        "healthyDisabledLevel": 10,
+        "healthySkippedLevel": 5
+        }'
+    body_format: json
+  register: projectCreated
+
+- name: Store Redmine project ID in vault
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/dashboardtoken') }}"
+  uri:
+    url: https://vault.techorrect.com:8200/v1/dashboard/redmineProjectId
+    method: POST
+    body: |
+      '{"value": "{{ projectCreated.body | regex_replace('Added the project with id: ', '') }}" }'
+    body_format: json
+
+
+
+
+
 # Most of the following steps can be omitted after the build process has been moved to a pipeline in Concourse
 - name: Install Techorrect GUI packages based on package.json
   npm:
@@ -70,12 +134,12 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
 - name: Link bower binary
-  file: 
+  file:
     src: /usr/local/lib/nodejs/lib/node_modules/bower/bin/bower
     dest: /usr/local/bin/bower
     state: link
 - name: Link gulp binary
-  file: 
+  file:
     src: /usr/local/lib/nodejs/lib/node_modules/gulp-cli/bin/gulp.js
     dest: /usr/local/bin/gulp
     state: link
