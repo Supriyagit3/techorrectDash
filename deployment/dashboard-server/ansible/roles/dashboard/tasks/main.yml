@@ -109,8 +109,8 @@
 - name: Add redmineAdmin user
   vars:
     vault_token: "{{ lookup('file', '{{ playbook_dir }}/dashboardtoken') }}"
-    redmine_admin_username: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
-    redmine_admin_pass: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    redmine_admin_username: "{{ lookup('hashi_vault', 'secret=concourse/main/redmineAdmin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    redmine_admin_pass: "{{ lookup('hashi_vault', 'secret=concourse/main/redmineAdmin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
   uri:
     url: https://dashboard.techorrect.com:3000/users/register
     method: POST
@@ -124,8 +124,8 @@
 - name: Login redmineAdmin user
   vars:
     vault_token: "{{ lookup('file', '{{ playbook_dir }}/dashboardtoken') }}"
-    redmine_admin_username: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
-    redmine_admin_pass: "{{ lookup('hashi_vault', 'secret=dashboard/redmineAdmin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    redmine_admin_username: "{{ lookup('hashi_vault', 'secret=concourse/main/redmineAdmin-username:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    redmine_admin_pass: "{{ lookup('hashi_vault', 'secret=concourse/main/redmineAdmin-password:value token={{ vault_token }} url={{ vault_addr }}')}}"
   uri:
     url: https://dashboard.techorrect.com:3000/users/login
     method: POST
@@ -155,7 +155,7 @@
   vars:
     vault_token: "{{ lookup('file', '{{ playbook_dir }}/dashboardtoken') }}"
   uri:
-    url: https://vault.techorrect.com:8200/v1/dashboard/redmineProjectId
+    url: https://vault.techorrect.com:8200/v1/concourse/main/redmineProjectId
     method: POST
     body: |
       '{"value": "{{ projectCreated.body | regex_replace('Added the project with id: ', '') }}" }'
