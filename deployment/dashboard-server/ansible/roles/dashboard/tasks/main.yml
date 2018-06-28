@@ -51,9 +51,7 @@
     masked: no
 - name: Start Techorrect backend service
   systemd: state=started name=techorrect_dashboard_backend
-<<<<<<< HEAD
   become: yes
-=======
 
 - name: Login to vault
   local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretID }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/dashboardtoken
@@ -126,9 +124,6 @@
         "projects": "[{{ projectCreated.body | regex_replace('Added the project with id: ', '') }}]"
       }'
     body_format: json
-
-
->>>>>>> origin/add-vault-to-ansible
 # Most of the following steps can be omitted after the build process has been moved to a pipeline in Concourse
 - name: Install Techorrect GUI packages based on package.json
   npm:
