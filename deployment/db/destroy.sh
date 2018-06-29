@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 cd terraform
-yes yes | terraform destroy
+terraform destroy -auto-approve
