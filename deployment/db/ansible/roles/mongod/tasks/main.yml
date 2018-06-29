@@ -1,5 +1,5 @@
 ---
-# This role deploys the mongod processes and sets up the replication set.
+# This role deploys the mongod processes
 
 - name: create data directory for mongodb
   become: yes
@@ -56,6 +56,8 @@
     name: "{{ mongo_dashboard_username }}"
     password: "{{ mongo_dashboard_pass }}"
     database: admin
-    roles: { db: dashboard, role: dbOwner }'
+    roles:
+      - db: dashboard
+        role: dbOwner
     state: present
   tags: dashboard_user
