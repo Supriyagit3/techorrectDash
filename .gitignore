@@ -73,6 +73,8 @@ register.sh
 # .tfstate files
 **/terraform/*.tfstate
 **/terraform/*.tfstate.*
+**/terraform/*.tfvars
+
 
 # Ansible files
 **/ansible/hosts
