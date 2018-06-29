@@ -2,25 +2,38 @@
 # This Playbook runs all the common plays in the deployment
 
 - name: Create the repository for mongo
+  become: yes
   copy: src=10gen.repo.j2 dest=/etc/yum.repos.d/10gen.repo
 
 - name: Create the mongod user
+  become: yes
   user: name=mongod comment="MongoD"
 
 - name: Create the data directory for the namenode metadata
+  become: yes
   file: path={{ mongodb_datadir_prefix }} owner=mongod group=mongod state=directory
 
 - name: Install the mongodb package
+  become: yes
   yum: name={{ item }} state=installed
   with_items:
    - mongodb-org
-   - python-pip
-  tags: admin_user
 
 - name: Install the latest pymongo package
-  pip: name=pymongo state=latest use_mirrors=no
-  tags: admin_user
+  become: yes
+  #TODO: should remove the version and set state to present when this bug closes: https://jira.mongodb.org/browse/PYTHON-1547
+  pip: name=pymongo state=present use_mirrors=no version=3.5.1
+
+- name: Install the latest hvac package
+  become: yes
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "hvac[parser]"
 
 - name: Create the iptables file
+  become: yes
   template: src=iptables.j2 dest=/etc/sysconfig/iptables
   notify: restart iptables
+  tags: dashboard_user

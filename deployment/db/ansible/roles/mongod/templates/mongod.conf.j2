@@ -14,5 +14,8 @@ port = {{ mongod_port }}
 dbpath={{ mongodb_datadir_prefix }}mongo-{{ inventory_hostname }}
 keyFile={{ mongodb_datadir_prefix }}secret
 
+#Turn on authentication
+auth = true
+
 # location of pidfile
 pidfilepath = /var/run/mongo/mongod-{{ inventory_hostname }}.pid

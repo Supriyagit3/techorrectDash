@@ -12,5 +12,5 @@ mongodb_datadir_prefix: /data/
 #
 iface: '{{ ansible_default_ipv4.interface }}'
 
-# The password for admin user
-mongo_admin_pass: 123456
+# Vault Config
+vault_addr: https://vault.techorrect.com:8200
