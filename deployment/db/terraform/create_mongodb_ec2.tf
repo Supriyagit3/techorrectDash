@@ -16,3 +16,7 @@ resource "aws_instance" "mongodb" {
 output "instance-dns" {
   value = "${aws_instance.mongodb.public_dns}"
 }
+
+output "instance-private-ip" {
+  value = "${aws_instance.mongodb.private_ip}"
+}

@@ -51,8 +51,9 @@ typings/
 # Optional REPL history
 .node_repl_history
 
-# Output of 'npm pack'
+# Output of 'npm pack' (and other zip archives)
 *.tgz
+*.tar.gz
 
 # Yarn Integrity file
 .yarn-integrity
@@ -77,5 +78,5 @@ register.sh
 **/ansible/hosts
 **/ansible/*.retry
 **/ansible/**/secret
-
 **/ansible/**/dashboardtoken
+**/ansible/**/mongotoken

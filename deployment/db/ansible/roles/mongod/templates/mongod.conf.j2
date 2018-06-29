@@ -9,10 +9,14 @@ logappend=true
 # fork and run in background
 fork = true
 
+bind_ip = 127.0.0.1, {{ private_ip }}
 port = {{ mongod_port }}
 
 dbpath={{ mongodb_datadir_prefix }}mongo-{{ inventory_hostname }}
 keyFile={{ mongodb_datadir_prefix }}secret
+
+#Turn on authentication
+auth = true
 
 # location of pidfile
 pidfilepath = /var/run/mongo/mongod-{{ inventory_hostname }}.pid

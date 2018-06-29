@@ -1,11 +1,12 @@
 ---
 
-- hosts: local
+- hosts: mongo_servers
+  vars_prompt:
+    - name: "vaultRoleId"
+      prompt: "Vault Role ID for Ansible"
+    - name: "vaultSecretID"
+      prompt: "Vault Secret for Ansible"
   roles:
   - role: prep
-
-- hosts: mongo_servers
-  become: yes
-  roles:
   - role: common
   - role: mongod

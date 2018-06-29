@@ -1,4 +1,8 @@
 
 - name: Prepare authorization key file
   local_action: shell openssl rand -base64 756 > {{ playbook_dir }}/roles/mongod/files/secret
-  tags: local
+  run_once: True
+
+- name: Login to vault
+  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretID }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/mongotoken
+  run_once: True
