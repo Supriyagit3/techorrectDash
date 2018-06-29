@@ -9,7 +9,7 @@ TAR_DIR=$OUTPUT_DIR/dashboard
 mkdir -p $TAR_DIR
 
 # Move backend server code to results folder
-mv $WORK_DIR/dashboard-server $TAR_DIR
+mv $DASH_REPO_DIR/dashboard-server $TAR_DIR
 
 # Install necessary front-end build tools
 cd $DASH_REPO_DIR/gui
