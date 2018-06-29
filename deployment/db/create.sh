@@ -1,7 +1,8 @@
 #!/bin/bash
+set -e
 
 cd terraform
-yes yes | terraform apply
+terraform apply -auto-approve
 
 PUBLIC_DNS=$(terraform output instance-dns)
 PRIVATE_IP=$(terraform output instance-private-ip)
@@ -10,4 +11,7 @@ cat ../ansible/hosts.template | sed 's@<public_dns>@'"$PUBLIC_DNS"'@g;s@<private
 
 cd ../ansible
 
-yes yes | ansible-playbook -i ./hosts site.yml --extra-vars "@secrets.yaml"
+sleep 30
+
+export ANSIBLE_HOST_KEY_CHECKING=False
+ansible-playbook -i ./hosts site.yml --extra-vars "@secrets.yaml"
