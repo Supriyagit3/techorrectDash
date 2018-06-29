@@ -8,7 +8,7 @@
       prompt: "Vault Secret for Ansible"
       private: yes
     - name: "mongoHostname"
-      prompt: "Mongodb hostname"
+      prompt: "Mongodb private IP address"
       private: no
     - name: "mongoPort"
       prompt: "Mongodb port"

@@ -1,10 +1,14 @@
 #!/bin/bash
-yes yes | terraform apply
+set -x
+
+WORK_ROOT_DIR=$PWD
+cd $WORK_ROOT_DIR/terraform
+terraform apply -auto-approve
 
 PUBLIC_DNS=$(terraform output instance-dns)
 
-cat ../ansible/hosts.template | sed 's@<public_dns>@'"$PUBLIC_DNS"'@g' > ../ansible/hosts
+cat $WORK_ROOT_DIR/ansible/hosts.template | sed 's@<public_dns>@'"$PUBLIC_DNS"'@g' > $WORK_ROOT_DIR/ansible/hosts
 
-cd ../ansible
+cd $WORK_ROOT_DIR/ansible
 
-yes yes | ansible-playbook -i ./hosts site.yml
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./hosts site.yml -e @secrets.yml

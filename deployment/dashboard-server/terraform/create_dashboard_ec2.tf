@@ -88,3 +88,7 @@ resource "aws_route53_record" "dashboard" {
     evaluate_target_health = true
   }
 }
+
+output "instance-dns" {
+  value = "${aws_instance.dashboard.public_dns}"
+}
