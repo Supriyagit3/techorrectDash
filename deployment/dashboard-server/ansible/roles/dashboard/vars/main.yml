@@ -1,2 +1,1 @@
 vault_addr: "https://vault.techorrect.com:8200"
-mongoHost: "172.31.43.55:27017"

@@ -3,8 +3,17 @@
   vars_prompt:
     - name: "vaultRoleId"
       prompt: "Vault Role ID for Ansible"
+      private: yes
     - name: "vaultSecretId"
       prompt: "Vault Secret for Ansible"
+      private: yes
+    - name: "mongoHostname"
+      prompt: "Mongodb hostname"
+      private: no
+    - name: "mongoPort"
+      prompt: "Mongodb port"
+      default: 27017
+      private: no
   roles:
   - role: nginx
   - role: dashboard
