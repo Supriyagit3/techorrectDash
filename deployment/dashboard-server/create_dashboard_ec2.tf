@@ -2,17 +2,6 @@ provider "aws" {
   region     = "us-east-2"
 }
 
-data "template_file" "dashboard_config" {
-  template = "${file("${path.module}/config.json.tpl")}"
-
-  vars {
-   vaultRoleId = "${var.vaultRoleId}"
-   vaultSecretId = "${var.vaultSecretId}"
-   vaultURL = "${var.vaultURL}"
-   mongoHost = "${var.mongoHost}"
-  }
-}
-
 resource "aws_instance" "dashboard" {
   ami           = "ami-8c122be9" # Amazon Linux 2 AMI (HVM), SSD Volume Type
   instance_type = "t2.micro"
