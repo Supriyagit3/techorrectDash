@@ -25,10 +25,47 @@
     dest: /usr/local/bin/npm
     state: link
   become: yes
-- name: Upload Techorrect dashboard archive
+
+- name: Install pip and virtualenv
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - python2-pip
+      - python-virtualenv
+  become: yes
+
+- name: Install ansible aws_s3 module dependencies
+  pip: 
+    name: 
+      - boto boto3 botocore
+    extra_args: --user
+
+- name: Find latest version of dashboard tar archive from S3
+  aws_s3:
+    bucket: techorrect-dash
+    object: deploy-ver/version
+    mode: getstr
+    aws_access_key: "{{ awsAccessKeyId }}"
+    aws_secret_key: "{{ awsSecretAccessKey }}"
+  register: dashVersion
+
+- name: Download latest dashboard tar archive from S3
+  aws_s3:
+    bucket: techorrect-dash
+    object: "deploy/dash-v{{ dashVersion.contents }}.tar.gz"
+    mode: get
+    aws_access_key: "{{ awsAccessKeyId }}"
+    aws_secret_key: "{{ awsSecretAccessKey }}"
+    dest: /home/ec2-user/dash.tar.gz
+  debugger: on_failed
+
+- name: Uncompress Techorrect dashboard archive
   unarchive:
-    src: dash.tar.gz
+    remote_src: yes
+    src: /home/ec2-user/dash.tar.gz
     dest: /home/ec2-user
+
 - name: Copy ExpressJS bash start script
   copy:
     src: start_backend.sh
@@ -59,49 +96,12 @@
   systemd: state=started name=techorrect_dashboard_backend
   become: yes
 
-# Most of the following steps can be omitted after the build process has been moved to a pipeline in Concourse
-- name: Install Techorrect GUI packages based on package.json
-  npm:
-    path: /home/ec2-user/dashboard/gui
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-# git is a requirement for bower install later on
-- name: Install git
-  yum:
-    name: git
-    state: latest
-  become: yes
-- name: Install bower
-  npm:
-    path: /home/ec2-user/dashboard/gui
-    name: bower
-    global: no
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-- name: Install gulp
-  npm:
-    path: /home/ec2-user/dashboard/gui
-    name: gulp-cli
-    global: no
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-- name: Install bower packages based on bower.json
-  bower:
-    path: /home/ec2-user/dashboard/gui
-    relative_execpath: node_modules/.bin
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-- name: Build minified files using gulp
-  command: node_modules/.bin/gulp
-  args:
-    chdir: /home/ec2-user/dashboard/gui
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+# Copy dashboard gui files to nginx folder
 - name: Clear default nginx files
   shell: rm -rf /usr/share/nginx/html/*
   become: yes
 - name: Move minified files to nginx dir
-  shell: mv /home/ec2-user/dashboard/gui/dist/* /usr/share/nginx/html
+  shell: mv /home/ec2-user/dashboard/dist/* /usr/share/nginx/html
   become: yes
 - name: Start nginx
   systemd: state=started name=nginx
