@@ -25,4 +25,4 @@ mv $DASH_REPO_DIR/gui/dist $TAR_DIR
 
 # Build archive
 cd $OUTPUT_DIR
-tar -czf dash-v$(cat $WORK_DIR/dash-version).tar.gz dashboard
+tar -czf dash-v$(cat $WORK_DIR/version).tar.gz dashboard
