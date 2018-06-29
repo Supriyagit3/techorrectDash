@@ -1,1 +1,1 @@
-variable "ENVIRONMENT" {}
+variable "ENVIRONMENT" { default = "dev" }
