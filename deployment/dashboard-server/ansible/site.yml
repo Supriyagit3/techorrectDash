@@ -3,7 +3,7 @@
   vars_prompt:
     - name: "vaultRoleId"
       prompt: "Vault Role ID for Ansible"
-    - name: "vaultSecretID"
+    - name: "vaultSecretId"
       prompt: "Vault Secret for Ansible"
   roles:
   - role: nginx

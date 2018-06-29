@@ -5,22 +5,26 @@
   file: path=/usr/local/lib/nodejs
         state=directory
         mode=0755
+  become: yes
 - name: Unarchive nodejs into install directory
   unarchive:
     src: /tmp/node-v8.11.3-linux-x64.tar.xz
     dest: /usr/local/lib/nodejs
     remote_src: yes
     extra_opts: ["--strip-components=1"]
+  become: yes
 - name: Link node binary
   file:
     src: /usr/local/lib/nodejs/bin/node
     dest: /usr/local/bin/node
     state: link
+  become: yes
 - name: Link npm binary
   file:
     src: /usr/local/lib/nodejs/bin/npm
     dest: /usr/local/bin/npm
     state: link
+  become: yes
 - name: Upload Techorrect dashboard archive
   unarchive:
     src: dash.tar.gz
@@ -34,6 +38,7 @@
   copy:
     src: techorrect_dashboard_backend.service
     dest: /etc/systemd/system/techorrect_dashboard_backend.service
+  become: yes
 - name: Upload credentials in config.json template
   template:
     src: config.json.j2
@@ -49,6 +54,7 @@
     name: techorrect_dashboard_backend
     enabled: yes
     masked: no
+  become: yes
 - name: Start Techorrect backend service
   systemd: state=started name=techorrect_dashboard_backend
   become: yes
@@ -103,8 +109,9 @@
 
 # Dashboard data set up
 - name: Login to vault
-  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretID }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/dashboardtoken
+  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretId }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/dashboardtoken
   run_once: True
+  tags: seed-data
 
 - name: Add redmineAdmin user
   vars:
@@ -120,6 +127,7 @@
         "admin": "true"
       }
     body_format: json
+  tags: seed-data
 
 - name: Login redmineAdmin user
   vars:
@@ -135,6 +143,7 @@
       }
     body_format: json
   register: dashboardLogin
+  tags: seed-data
 
 - name: Create Redmine project in dashboard
   uri:
@@ -152,6 +161,7 @@
     body_format: json
     return_content: yes
   register: projectCreated
+  tags: seed-data
 
 - name: Store Redmine project ID in vault
   vars:
@@ -165,6 +175,7 @@
       {"value": "{{ projectCreated.content | regex_replace('Added the project with id: ', '')}}" }
     body_format: json
     status_code: 204
+  tags: seed-data
 
 - name: Make user assigned to redmine project
   vars:
@@ -181,3 +192,4 @@
         "projects": ["{{ projectCreated.content | regex_replace('Added the project with id: ', '') }}"]
       }
     body_format: json
+  tags: seed-data
