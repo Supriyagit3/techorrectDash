@@ -8,7 +8,7 @@ var passport = require("passport");
 var cors = require("cors");
 
 var corsOptions = {
-  origin: /http\:\/\/192\.168\.2\..*\:[0-9]*/,
+  origin: /https\:\/\/dashboard\.techorrect\.com\:[0-9]*/,
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
