@@ -9,8 +9,7 @@ var cors = require("cors");
 
 var corsOptions = {
   origin: /https\:\/\/dashboard\.techorrect\.com\:[0-9]*/,
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  allowedHeaders: ["Content-Type", "x-access-token", "accept"]
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 var indexRouter = require("./routes/index");
@@ -27,25 +26,22 @@ var app = express();
 
 config.mongoUrl
   .then(function(url) {
-    mongoose.connect(url).catch(function(err) {
-      if (err) {
+    mongoose.connect(url).
+      catch(function(err) { if(err) {
         console.log("Couldn't connect to mongodb: " + err.message);
         process.exit(110);
-      }
-    });
+      }});
     var db = mongoose.connection;
     db.on("error", console.error.bind(console, "connection error:"));
     db.once("open", function() {
       // we're connected!
       console.log("Connected correctly to mongodb");
     });
-  })
-  .catch(function(err) {
-    if (err) {
-      console.error("app.js config.mongoUrl error: " + err.message);
-      process.exit(111);
-    }
-  });
+  }) 
+  .catch(function(err) { if(err) {
+    console.error('app.js config.mongoUrl error: ' + err.message);
+    process.exit(111);
+  }});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
