@@ -93,14 +93,21 @@ router.post("/login", function(req, res, next) {
         admin: user.admin,
         projects: user.projects
       })
-      .then(function(token) {
-        res.status(200).json({
-          status: "Login successful!",
-          success: true,
-          token: token
+        .then(function(token) {
+          if (!token) {
+            return res.status(500).json({
+              err: "Token not generated"
+            });
+          }
+          res.status(200).json({
+            status: "Login successful!",
+            success: true,
+            token: token
+          });
+        })
+        .catch(function(err) {
+          console.error("users.js verify.getToken Error: " + err.message);
         });
-      })
-      .catch(function(err) { console.error('users.js verify.getToken Error: ' + err.message); });
     });
   })(req, res, next);
 });
