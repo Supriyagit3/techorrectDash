@@ -7,7 +7,7 @@
     - name: "vaultAnsibleSecretId"
       prompt: "Vault Secret for Ansible"
       private: yes
-    - name: "vaultDashboardeRoleId"
+    - name: "vaultDashboardRoleId"
       prompt: "Vault Role ID for Dashboard"
       private: yes
     - name: "vaultDashboardSecretId"
