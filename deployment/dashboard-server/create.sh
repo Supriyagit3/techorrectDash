@@ -3,6 +3,7 @@ set -e
 
 WORK_ROOT_DIR=$PWD
 cd $WORK_ROOT_DIR/terraform
+terraform init
 terraform apply -auto-approve
 
 PUBLIC_DNS=$(terraform output instance-dns)

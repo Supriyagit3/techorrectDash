@@ -1,11 +1,17 @@
 - hosts: webservers
   remote_user: ec2-user
   vars_prompt:
-    - name: "vaultRoleId"
+    - name: "vaultAnsibleRoleId"
       prompt: "Vault Role ID for Ansible"
       private: yes
-    - name: "vaultSecretId"
+    - name: "vaultAnsibleSecretId"
       prompt: "Vault Secret for Ansible"
+      private: yes
+    - name: "vaultDashboardeRoleId"
+      prompt: "Vault Role ID for Dashboard"
+      private: yes
+    - name: "vaultDashboardSecretId"
+      prompt: "Vault Secret for Dashboard"
       private: yes
     - name: "mongoHostname"
       prompt: "Mongodb private IP address"

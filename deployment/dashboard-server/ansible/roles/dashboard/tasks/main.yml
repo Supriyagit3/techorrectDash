@@ -36,8 +36,8 @@
   become: yes
 
 - name: Install ansible aws_s3 module dependencies
-  pip: 
-    name: 
+  pip:
+    name:
       - boto boto3 botocore
     extra_args: --user
 
@@ -109,7 +109,7 @@
 
 # Dashboard data set up
 - name: Login to vault
-  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretId }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/dashboardtoken
+  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultAnsibleRoleId }}", "secret_id":"{{ vaultAnsibleSecretId }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/dashboardtoken
   run_once: True
   tags: seed-data
 

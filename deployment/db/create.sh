@@ -2,6 +2,7 @@
 set -e
 
 cd terraform
+terraform init
 terraform apply -auto-approve
 
 PUBLIC_DNS=$(terraform output instance-dns)
@@ -14,4 +15,4 @@ cd ../ansible
 sleep 30
 
 export ANSIBLE_HOST_KEY_CHECKING=False
-ansible-playbook -i ./hosts site.yml --extra-vars "@secrets.yaml"
+ansible-playbook -i ./hosts site.yml --extra-vars "@secrets.yml"
