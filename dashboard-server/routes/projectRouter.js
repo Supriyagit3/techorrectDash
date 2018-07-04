@@ -13,6 +13,7 @@ projectRouter
   .route("/")
   .all(Verify.verifyOrdinaryUser)
 
+  .options()
   .get(function(req, res, next) {
     if (req.query.page) {
       var page = parseInt(req.query.page);
