@@ -41,7 +41,15 @@
       - boto boto3 botocore
     extra_args: --user
 
+- name: Login to vault
+  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultAnsibleRoleId }}", "secret_id":"{{ vaultAnsibleSecretId }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/ansibletoken
+  run_once: True
+
 - name: Find latest version of dashboard tar archive from S3
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/ansibletoken') }}"
+    awsAccessKeyId: "{{ lookup('hashi_vault', 'secret=dashboard-setup/awsAccessKeyId:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    awsSecretAccessKey: "{{ lookup('hashi_vault', 'secret=dashboard-setup/awsSecretAccessKey:value token={{ vault_token }} url={{ vault_addr }}')}}"
   aws_s3:
     bucket: techorrect-dash
     object: deploy-ver/version
@@ -51,6 +59,10 @@
   register: dashVersion
 
 - name: Download latest dashboard tar archive from S3
+  vars:
+    vault_token: "{{ lookup('file', '{{ playbook_dir }}/ansibletoken') }}"
+    awsAccessKeyId: "{{ lookup('hashi_vault', 'secret=dashboard-setup/awsAccessKeyId:value token={{ vault_token }} url={{ vault_addr }}')}}"
+    awsSecretAccessKey: "{{ lookup('hashi_vault', 'secret=dashboard-setup/awsSecretAccessKey:value token={{ vault_token }} url={{ vault_addr }}')}}"
   aws_s3:
     bucket: techorrect-dash
     object: "deploy/dash-v{{ dashVersion.contents }}.tar.gz"

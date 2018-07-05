@@ -82,4 +82,5 @@ register.sh
 **/ansible/**/secret
 **/ansible/**/dashboardtoken
 **/ansible/**/mongotoken
+**/ansible/**/ansibletoken
 **/secrets.yml
