@@ -1,3 +1,10 @@
+- name: Create mongod/files directory
+  file:
+    path: "{{ playbook_dir }}/roles/mongod/files"
+    state: directory
+    mode: 0775
+  run_once: True
+  delegate_to: localhost
 
 - name: Prepare authorization key file
   local_action: shell openssl rand -base64 756 > {{ playbook_dir }}/roles/mongod/files/secret
