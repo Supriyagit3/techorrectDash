@@ -7,7 +7,7 @@ var mongoose = require("mongoose");
 var cors = require("cors");
 
 var corsOptions = {
-  origin: /http\:\/\/192\.168\.2\..*\:[0-9]*/,
+  origin: "*",
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
@@ -21,7 +21,7 @@ var testRunRouter = require("./routes/testRunRouter");
 var app = express();
 
 var url =
-  "mongodb://dashboardAdmin:dashPWD@localhost:27017/dashboard?authSource=admin";
+  "mongodb://dashboardAdmin:dashPWD@sl-us-south-1-portal.29.dblayer.com:47652,sl-us-south-1-portal.28.dblayer.com:47652/dashboard?authSource=admin&ssl=true";
 mongoose.connect(url);
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
