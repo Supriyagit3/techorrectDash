@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var Suite = require("../models/suite");
 var Schema = mongoose.Schema;
 
 var projectSchema = new Schema(
