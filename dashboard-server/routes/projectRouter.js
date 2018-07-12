@@ -35,12 +35,28 @@ projectRouter
         if (err) throw err;
 
         Project.count(req.params).exec(function(err, count) {
+          var updated = [];
+          var promises = projects.map(function(project) {
+            return new Promise(function(resolve, reject) {
+              project.getSuiteCounts(function(unhealthyCounts, healthyCounts) {
+                obj_proj = project.toObject();
+                obj_proj.unhealthySuites = unhealthyCounts;
+                obj_proj.healthySuites = healthyCounts;
+                updated.push(obj_proj);
+                resolve();
+              });
+            });
+          });
+
+          Promise.all(promises)
+            .then(function() {
               res.json({
-                // TODO: calculate healthy and unhealthy suites
-            projects: projects,
+                projects: updated,
                 current: page,
                 pages: Math.ceil(count / perPage)
               });
+            })
+            .catch(console.error);
         });
       });
   })
