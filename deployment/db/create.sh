@@ -2,6 +2,11 @@
 set -e
 
 WORK_ROOT_DIR=$PWD
+OS_TYPE="$(uname -s)"
+
+if [[ $OS_TYPE = Darwin* ]]; then
+  export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+fi
 
 # Create secrets.yml if it doesn't exist
 if [ ! -f "$WORK_ROOT_DIR/ansible/secrets.yml" ]; then
