@@ -21,8 +21,8 @@
         <li class="nav-item"><a class="nav-link" ng-if="!loggedIn" ng-click="openLogin()">
           <span class="fa fa-unlock"></span> Login</a>
         </li>
-        <li class="navbar-dark" class="nav-link-disabled" ng-if="loggedIn">
-          <a>{{username}}</a>
+        <li class="navbar-dark" class="nav-link" ng-if="loggedIn">
+          <a class="nav-link">{{username}}</a>
         </li>
         <li class="navbar-dark" ng-if="loggedIn">
           <a class="nav-link" ng-click="logOut()">

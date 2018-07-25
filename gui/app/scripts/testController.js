@@ -27,7 +27,7 @@ angular
       );
       getTestById(
         $scope,
-        SuiteFactory,
+        TestFactory,
         $stateParams.projectId,
         $stateParams.suiteId,
         $stateParams.testId
