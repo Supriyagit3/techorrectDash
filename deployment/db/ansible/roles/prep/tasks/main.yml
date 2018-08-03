@@ -11,5 +11,11 @@
   run_once: True
 
 - name: Login to vault
-  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretId }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/mongotoken
+  local_action: |
+    shell curl --fail -s \
+                --request POST \
+                --data '{"role_id":"{{ vaultRoleId }}", "secret_id":"{{ vaultSecretId }}"}' \
+                {{ vault_addr }}/v1/auth/approle/login > {{ playbook_dir }}/mongotoken.raw \
+        && jq -r '.auth.client_token' {{ playbook_dir }}/mongotoken.raw > {{ playbook_dir }}/mongotoken \
+        && rm {{ playbook_dir }}/mongotoken.raw
   run_once: True
