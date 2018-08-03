@@ -3,7 +3,7 @@ terraform {
   region    = "us-east-2"
   bucket    = "techorrect-terraform-state"
   key       = "techorrect-dashboard-mongodb-tfstate"
-  dynamodb_table = "techorrect-dashboard-mongodb-tfstate-lock"
+  dynamodb_table = "techorrect-tfstate-lock"
   }
 }
 

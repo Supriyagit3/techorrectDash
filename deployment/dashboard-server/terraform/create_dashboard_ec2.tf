@@ -1,3 +1,12 @@
+terraform {
+  backend "s3" {
+  region    = "us-east-2"
+  bucket    = "techorrect-terraform-state"
+  key       = "techorrect-dashboard-backend-tfstate"
+  dynamodb_table = "techorrect-tfstate-lock"
+  }
+}
+
 provider "aws" {
   region     = "us-east-2"
 }

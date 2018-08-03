@@ -42,7 +42,13 @@
     extra_args: --user
 
 - name: Login to vault
-  local_action: shell curl -s --request POST --data '{"role_id":"{{ vaultAnsibleRoleId }}", "secret_id":"{{ vaultAnsibleSecretId }}"}' {{ vault_addr }}/v1/auth/approle/login | jq -r '.auth.client_token' > {{ playbook_dir }}/ansibletoken
+  local_action: |
+    shell curl --fail -s \
+                --request POST \
+                --data '{"role_id":"{{ vaultAnsibleRoleId }}", "secret_id":"{{ vaultAnsibleSecretId }}"}' \
+                {{ vault_addr }}/v1/auth/approle/login > {{ playbook_dir }}/ansibletoken.raw \ 
+        && jq -r '.auth.client_token' {{ playbook_dir }}/ansibletoken.raw > {{ playbook_dir }}/ansibletoken \
+        && rm {{ playbook_dir }}/ansibletoken.raw
   run_once: True
 
 - name: Find latest version of dashboard tar archive from S3
